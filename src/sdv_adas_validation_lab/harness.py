@@ -8,12 +8,19 @@ import json
 import time
 from dataclasses import asdict
 from pathlib import Path
+from typing import Protocol
 from uuid import uuid4
 
+from .contract import SensorFrame
 from .faults import DelayQueue, FaultConfig, FrameEvent
 from .preflight import collect
 from .replay import ReplaySource
 from .runtime import OnnxReferenceRuntime, Prediction
+from .tensorrt_runtime import TensorRtRuntime
+
+
+class RuntimeAdapter(Protocol):
+  def infer(self, frame: SensorFrame) -> Prediction: ...
 
 
 def _write_events(path: Path, events: list[FrameEvent]) -> None:
@@ -39,7 +46,7 @@ def _write_predictions(path: Path, predictions: list[Prediction]) -> None:
 
 
 def run_once(
-  source: ReplaySource, fault: FaultConfig, output_dir: Path, runtime: OnnxReferenceRuntime | None = None
+  source: ReplaySource, fault: FaultConfig, output_dir: Path, runtime: RuntimeAdapter | None = None
 ) -> dict[str, object]:
   output_dir.mkdir(parents=True, exist_ok=False)
   queue = DelayQueue(fault)
@@ -96,7 +103,7 @@ def run_once(
 
 
 def run_repeated(
-  source: ReplaySource, fault: FaultConfig, output_root: Path, repeats: int, runtime: OnnxReferenceRuntime | None = None
+  source: ReplaySource, fault: FaultConfig, output_root: Path, repeats: int, runtime: RuntimeAdapter | None = None
 ) -> list[dict[str, object]]:
   if repeats <= 0:
     raise ValueError("repeats must be positive")
@@ -111,11 +118,20 @@ def main() -> None:
   parser.add_argument("--drop-every", type=int, default=0)
   parser.add_argument("--repeats", type=int, default=1)
   parser.add_argument("--onnx-model", type=Path)
+  parser.add_argument("--tensorrt-engine", type=Path)
   parser.add_argument("--provider", default="CPUExecutionProvider")
   parser.add_argument("--output", type=Path, default=Path("outputs/replay-fault"))
   args = parser.parse_args()
   source = ReplaySource.from_jsonl(args.replay) if args.replay else ReplaySource.synthetic(args.synthetic_frames or 20)
-  runtime = OnnxReferenceRuntime(args.onnx_model, provider=args.provider) if args.onnx_model else None
+  if args.onnx_model and args.tensorrt_engine:
+    parser.error("select only one runtime model")
+  runtime = (
+    OnnxReferenceRuntime(args.onnx_model, provider=args.provider)
+    if args.onnx_model
+    else TensorRtRuntime(args.tensorrt_engine)
+    if args.tensorrt_engine
+    else None
+  )
   summaries = run_repeated(source, FaultConfig(args.delay_ms, args.drop_every), args.output, args.repeats, runtime)
   print(json.dumps(summaries, indent=2))
 

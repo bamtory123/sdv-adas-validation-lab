@@ -13,7 +13,7 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 | 0 | Repository, pinned environment, preflight | imports GPU runtimes; manifest-ready environment facts | In progress |
 | 1 | Versioned `SensorFrame`, replay source, stream preflight | contract and replay fixture tests | In progress |
 | 2 | ONNX reference runtime and fixed preprocessing | deterministic output on sample frames | In progress |
-| 3 | TensorRT FP32/FP16 build and runtime | output comparison and local GPU smoke | Pending |
+| 3 | TensorRT FP32/FP16 build and runtime | output comparison and local GPU smoke | In progress |
 | 4 | Non-blocking delay/drop faults | fake-clock FIFO/deadline/overflow tests | In progress |
 | 5 | Manifest, KPI, verdict, batch runner, report | hand-calculated KPI and report fixture tests | Pending |
 | 6 | Formal experiments and evidence | 3 retained runs per runtime/fault condition | Pending |
@@ -23,7 +23,7 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 
 1. Select a redistribution-compatible segmentation model and a small licensed replay fixture.
 2. Lock model-specific preprocessing/output decoding and verify reference output determinism.
-3. Add TensorRT FP32, then FP16; compare outputs before benchmarking.
+3. Add TensorRT FP16 and compare decoded outputs from both TensorRT precisions to the ONNX reference.
 4. Extend the shared delay/drop queue with formal run state and manifest/KPI/verdict reporting.
 
 ## Formal v0.1 experiment matrix

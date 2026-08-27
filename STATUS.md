@@ -17,6 +17,8 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 - Added a non-blocking delay/drop queue. Producer submission never sleeps; the publisher releases frames only at a monotonic deadline. Zero delay uses the same queue path.
 - Added a repeatable replay/fault CLI which writes isolated `manifest.json`, `frames.csv`, `events.jsonl`, and `summary.json` artifacts per run.
 - Added an ONNX Runtime reference adapter with fixed RGB8-to-NCHW float32 `[0,1]` preprocessing. Published frames can now produce per-frame `predictions.csv` latency and output-shape records.
+- Added local TensorRT FP32 engine build and static-shape direct GPU execution via CUDA Python bindings. TensorRT is selectable in the same replay/fault harness as the ONNX reference runtime.
+- GPU smoke-tested two repeated TensorRT runs: 5 synthetic frames, 5 ms delay, no configured drops; each produced 5 published and inferred frames with `valid/pass`. This uses a generated Identity ONNX model and is runtime-integration evidence only, not segmentation accuracy evidence.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
 - Unit tests: 18 passed on 2026-08-28.
@@ -24,12 +26,12 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 ## Not yet implemented
 
 - Replay source content hashing, stream coverage checks, and the dataset/model decision gate.
-- A redistribution-compatible segmentation model, model-specific output decoding, TensorRT engine build, and FP32/FP16 comparison.
+- A redistribution-compatible segmentation model, model-specific output decoding, TensorRT FP16, and FP32/FP16 accuracy comparison.
 - Fault queue, run state machine, manifest, KPI, verdict, report, batch runner, CI, and formal experiments.
 
 ## Next task
 
-Choose and pin the segmentation model/dataset fixture, then add TensorRT FP32 engine building and compare its decoded output to the ONNX reference runtime.
+Choose and pin the segmentation model/dataset fixture, then add TensorRT FP16 and compare both TensorRT decoded outputs to the ONNX reference runtime.
 
 ## Historical baseline
 
