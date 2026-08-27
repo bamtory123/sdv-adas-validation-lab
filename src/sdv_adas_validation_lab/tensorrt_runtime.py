@@ -26,7 +26,9 @@ class EngineBuild:
   engine_path: Path
 
 
-def build_engine(model_path: Path, engine_path: Path, *, precision: str = "fp32") -> EngineBuild:
+def build_engine(
+  model_path: Path, engine_path: Path, *, precision: str = "fp32", input_shape: tuple[int, ...] | None = None
+) -> EngineBuild:
   """Build a local TensorRT engine. Engines are intentionally not portable artifacts."""
   if precision not in {"fp32", "fp16"}:
     raise ValueError("precision must be fp32 or fp16")
@@ -40,6 +42,13 @@ def build_engine(model_path: Path, engine_path: Path, *, precision: str = "fp32"
     raise ValueError(f"TensorRT could not parse {model_path}: {errors}")
   config = builder.create_builder_config()
   config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 256 * 1024 * 1024)
+  input_tensor = network.get_input(0)
+  if any(dimension == -1 for dimension in input_tensor.shape):
+    if input_shape is None:
+      raise ValueError("dynamic ONNX input requires an explicit input_shape")
+    profile = builder.create_optimization_profile()
+    profile.set_shape(input_tensor.name, input_shape, input_shape, input_shape)
+    config.add_optimization_profile(profile)
   if precision == "fp16":
     config.set_flag(trt.BuilderFlag.FP16)
   serialized = builder.build_serialized_network(network, config)
