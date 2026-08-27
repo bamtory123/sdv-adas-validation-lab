@@ -23,6 +23,8 @@ ReplaySource -> SensorFrame -> StreamValidator -> FaultQueue -> RuntimeAdapter
 - `RuntimeAdapter`: reference ONNX Runtime, TensorRT FP32, or TensorRT FP16 with identical preprocessing and output decoding.
 - `KPI / verdict / report`: separates execution validity from performance outcome and generates reproducible artifacts.
 
+The parity comparator uses the same `ReplaySource` frames for both runtimes and aggregates primary segmentation label agreement. It is a runtime-consistency KPI; ground-truth accuracy requires labeled data and is tracked separately.
+
 ## Boundary and versions
 
 - Host: Windows + WSL2; GPU: NVIDIA GeForce RTX 4080.
