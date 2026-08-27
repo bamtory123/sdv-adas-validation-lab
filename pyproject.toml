@@ -4,7 +4,11 @@ version = "0.1.0"
 description = "Reproducible camera sensor-runtime validation for ADAS portfolios"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "onnx>=1.22.0",
+    "onnxruntime-gpu>=1.29.0",
+    "tensorrt>=11.2.1.2",
+]
 
 [dependency-groups]
 dev = ["pytest>=8.0"]

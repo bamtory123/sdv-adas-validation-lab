@@ -1,0 +1,8 @@
+runtime:
+  python: "3.12"
+  onnxruntime_gpu: "1.29.0"
+  tensorrt: "11.2.1.2"
+hardware:
+  platform: "WSL2"
+  gpu: "NVIDIA GeForce RTX 4080"
+  driver: "610.47"
