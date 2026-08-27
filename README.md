@@ -12,3 +12,9 @@ Reproducible, offline validation of a camera frame contract, replay pipeline, tr
 - Environment preflight recorded in run manifests
 
 Openpilot/MetaDrive work remains a separate `v0.2` closed-loop adapter baseline; it is not copied into this repository.
+
+## Working documents
+
+- [Architecture](ARCHITECTURE.md): component boundaries, data path, and invariants.
+- [Plan](PLAN.md): v0.1 milestones and release evidence.
+- [Status](STATUS.md): completed work, verified evidence, and the next task.
