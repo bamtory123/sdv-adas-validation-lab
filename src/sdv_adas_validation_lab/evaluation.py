@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+import json
+from pathlib import Path
 from typing import Protocol
 
 import numpy as np
@@ -10,6 +12,7 @@ from PIL import Image
 
 from .contract import SensorFrame
 from .metrics import SegmentationMetrics, segmentation_metrics
+from .replay import ReplaySource
 from .runtime import Prediction
 
 
@@ -23,6 +26,18 @@ def load_label(path, *, shape: tuple[int, int]) -> np.ndarray:
   if label.mode not in {"L", "P"}:
     raise ValueError(f"label image must be indexed/grayscale, got {label.mode}")
   return np.asarray(label.resize((shape[1], shape[0]), Image.Resampling.NEAREST), dtype=np.uint8)
+
+
+def load_labeled_replay(manifest_path: Path) -> tuple[ReplaySource, tuple[np.ndarray, ...]]:
+  """Load a replay manifest whose every frame names an indexed label image."""
+  source = ReplaySource.from_jsonl(manifest_path)
+  labels: list[np.ndarray] = []
+  records = [json.loads(line) for line in manifest_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+  for frame, record in zip(source, records, strict=True):
+    if "label_path" not in record:
+      raise ValueError(f"missing label_path for frame {frame.frame_id}")
+    labels.append(load_label(manifest_path.parent / record["label_path"], shape=(frame.height, frame.width)))
+  return source, tuple(labels)
 
 
 def evaluate(

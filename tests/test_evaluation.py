@@ -1,8 +1,10 @@
+import json
+
 import numpy as np
 from PIL import Image
 
 from sdv_adas_validation_lab.contract import SensorFrame
-from sdv_adas_validation_lab.evaluation import evaluate, load_label
+from sdv_adas_validation_lab.evaluation import evaluate, load_label, load_labeled_replay
 from sdv_adas_validation_lab.runtime import Prediction
 
 
@@ -22,3 +24,15 @@ def test_label_loader_uses_nearest_neighbor(tmp_path) -> None:
   Image.fromarray(np.array([[0, 1]], dtype=np.uint8)).save(path)
   loaded = load_label(path, shape=(2, 2))
   assert loaded.tolist() == [[0, 1], [0, 1]]
+
+
+def test_labeled_replay_pairs_each_frame_with_its_indexed_label(tmp_path) -> None:
+  (tmp_path / "image.rgb").write_bytes(b"rgb")
+  Image.fromarray(np.array([[1]], dtype=np.uint8)).save(tmp_path / "label.png")
+  (tmp_path / "frames.jsonl").write_text(
+    json.dumps({"frame_id": 4, "capture_monotonic_ns": 10, "image_path": "image.rgb", "label_path": "label.png", "width": 1, "height": 1}) + "\n",
+    encoding="utf-8",
+  )
+  source, labels = load_labeled_replay(tmp_path / "frames.jsonl")
+  assert [frame.frame_id for frame in source] == [4]
+  assert labels[0].tolist() == [[1]]

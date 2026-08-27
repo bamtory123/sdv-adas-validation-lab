@@ -15,3 +15,7 @@ Raw models, images, replay data, and TensorRT engines are local artifacts and mu
 ## Accuracy-data boundary
 
 The Model Zoo sample-data archive includes ONNX test inputs and golden outputs, not semantic ground-truth labels. Those tensors are valid for ONNX regression checks only; they must not be reported as segmentation accuracy. The repository has a tested mIoU/pixel-accuracy metric implementation, but a final accuracy result requires a separately licensed labeled replay source with an explicit class mapping.
+
+## Ground-truth source
+
+The external evaluation source is PASCAL VOC 2012 class segmentation. Its `SegmentationClass` PNGs use the 21-class VOC index space expected by this model; index `255` is void and is ignored by the metric. The dataset is downloaded to a local cache and never committed or redistributed by this repository. `sdv_adas_validation_lab.voc.build_labeled_fixture` converts explicitly selected image IDs from an external `VOCdevkit/VOC2012` directory into this project's raw-RGB replay manifest with a paired `label_path`.
