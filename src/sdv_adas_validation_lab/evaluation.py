@@ -40,6 +40,36 @@ def load_labeled_replay(manifest_path: Path) -> tuple[ReplaySource, tuple[np.nda
   return source, tuple(labels)
 
 
+def evaluate_manifest(
+  runtime: RuntimeAdapter,
+  manifest_path: Path,
+  *,
+  class_count: int,
+  ignore_label: int = 255,
+) -> SegmentationMetrics:
+  """Evaluate a labeled replay after resizing each label to the runtime output."""
+  source = ReplaySource.from_jsonl(manifest_path)
+  records = [json.loads(line) for line in manifest_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+  predictions: list[np.ndarray] = []
+  targets: list[np.ndarray] = []
+  for frame, record in zip(source, records, strict=True):
+    if "label_path" not in record:
+      raise ValueError(f"missing label_path for frame {frame.frame_id}")
+    prediction = runtime.infer(frame).primary_labels
+    if prediction is None:
+      raise ValueError("runtime did not produce a primary label map")
+    predictions.append(prediction)
+    targets.append(load_label(manifest_path.parent / record["label_path"], shape=prediction.shape))
+  if not predictions:
+    raise ValueError("no labeled frames")
+  return segmentation_metrics(
+    np.concatenate(predictions, axis=0),
+    np.concatenate(targets, axis=0),
+    class_count=class_count,
+    ignore_label=ignore_label,
+  )
+
+
 def evaluate(
   runtime: RuntimeAdapter,
   frames: Iterable[SensorFrame],

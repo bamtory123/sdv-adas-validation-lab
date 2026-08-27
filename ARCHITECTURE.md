@@ -23,7 +23,7 @@ ReplaySource -> SensorFrame -> StreamValidator -> FaultQueue -> RuntimeAdapter
 - `RuntimeAdapter`: reference ONNX Runtime, TensorRT FP32, or TensorRT FP16 with identical preprocessing and output decoding.
 - `KPI / verdict / report`: separates execution validity from performance outcome and generates reproducible artifacts.
 
-The parity comparator uses the same `ReplaySource` frames for both runtimes and aggregates primary segmentation label agreement. It is a runtime-consistency KPI; ground-truth accuracy requires labeled data and is tracked separately. A labeled replay manifest adds one `label_path` per frame; labels must be indexed/grayscale and are resized with nearest-neighbor sampling to the recorded sensor shape.
+The parity comparator uses the same `ReplaySource` frames for both runtimes and aggregates primary segmentation label agreement. It is a runtime-consistency KPI; ground-truth accuracy requires labeled data and is tracked separately. A labeled replay manifest adds one `label_path` per frame; labels must be indexed/grayscale and are resized with nearest-neighbor sampling to the runtime's output shape before the metric is calculated.
 
 The replay harness records actual publish delay rather than only the requested fault delay, plus inference latency and published/captured coverage. This isolates transport scheduling from runtime execution time.
 
