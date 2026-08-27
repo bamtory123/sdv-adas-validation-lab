@@ -21,9 +21,9 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 
 ## Immediate execution order
 
-1. Repeat the runtime/delay matrix and retain individual valid, fail, and invalid artifacts.
-2. Generate the final Markdown report and sample-result release artifacts.
-3. Verify the CPU-only CI workflow and publish sample report artifacts.
+1. Add warm-up exclusion and an experiment manifest.
+2. Repeat the runtime/delay matrix and retain individual valid, fail, and invalid artifacts.
+3. Generate the final Markdown report and sample-result release artifacts.
 4. Extend the shared delay/drop queue with formal run state and manifest/KPI/verdict reporting.
 
 ## Formal v0.1 experiment matrix

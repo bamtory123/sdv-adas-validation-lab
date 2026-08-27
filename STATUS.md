@@ -31,6 +31,8 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 - Configured frame drops are now counted separately from unexpected loss. A six-frame delay/drop smoke (50 ms, every second frame dropped) produced 3 published and 3 expected drops with coverage 1.0 and `valid/pass`.
 - Added queue-capacity control and overflow coverage. A three-frame, 100 ms, depth-one smoke produced two overflow events and correctly returned `invalid/not_evaluated`.
 - Added a GitHub Actions CPU-only workflow for unit tests and report generation. TensorRT engine smoke remains an explicit local GPU test.
+- GitHub Actions CI passed after GPU-free preflight handling was added.
+- Retained a pre-formal FCN FP16 delay matrix: 0/50/100/150 ms, three runs per condition, all `valid/pass` with coverage 1.0. The first-run warm-up effect is not yet excluded, so these artifacts demonstrate repeatability plumbing rather than formal release KPI.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
 - Unit tests: 24 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
@@ -43,7 +45,7 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 
 ## Next task
 
-Retain repeated runtime/delay artifacts for the formal matrix, then generate release-ready sample report artifacts.
+Implement warm-up exclusion and an experiment manifest, then repeat the runtime/delay matrix as formal evidence.
 
 ## Historical baseline
 
