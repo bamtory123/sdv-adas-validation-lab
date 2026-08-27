@@ -31,7 +31,9 @@ def _write_events(path: Path, events: list[FrameEvent]) -> None:
 
 def _write_predictions(path: Path, predictions: list[Prediction]) -> None:
   with path.open("w", newline="", encoding="utf-8") as output:
-    writer = csv.DictWriter(output, fieldnames=["frame_id", "started_ns", "finished_ns", "latency_ns", "output_shapes"])
+    writer = csv.DictWriter(
+      output, fieldnames=["frame_id", "started_ns", "finished_ns", "latency_ns", "output_shapes", "output_hashes", "primary_label_hash"]
+    )
     writer.writeheader()
     writer.writerows(
       {
@@ -40,6 +42,8 @@ def _write_predictions(path: Path, predictions: list[Prediction]) -> None:
         "finished_ns": prediction.finished_ns,
         "latency_ns": prediction.latency_ns,
         "output_shapes": json.dumps(prediction.output_shapes),
+        "output_hashes": json.dumps(prediction.output_hashes),
+        "primary_label_hash": prediction.primary_label_hash,
       }
       for prediction in predictions
     )
@@ -120,15 +124,16 @@ def main() -> None:
   parser.add_argument("--onnx-model", type=Path)
   parser.add_argument("--tensorrt-engine", type=Path)
   parser.add_argument("--provider", default="CPUExecutionProvider")
+  parser.add_argument("--profile", choices=["unit", "fcn_resnet50_voc"], default="unit")
   parser.add_argument("--output", type=Path, default=Path("outputs/replay-fault"))
   args = parser.parse_args()
   source = ReplaySource.from_jsonl(args.replay) if args.replay else ReplaySource.synthetic(args.synthetic_frames or 20)
   if args.onnx_model and args.tensorrt_engine:
     parser.error("select only one runtime model")
   runtime = (
-    OnnxReferenceRuntime(args.onnx_model, provider=args.provider)
+    OnnxReferenceRuntime(args.onnx_model, provider=args.provider, profile=args.profile)
     if args.onnx_model
-    else TensorRtRuntime(args.tensorrt_engine)
+    else TensorRtRuntime(args.tensorrt_engine, profile=args.profile)
     if args.tensorrt_engine
     else None
   )

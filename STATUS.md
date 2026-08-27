@@ -21,6 +21,7 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 - GPU smoke-tested two repeated TensorRT runs: 5 synthetic frames, 5 ms delay, no configured drops; each produced 5 published and inferred frames with `valid/pass`. This uses a generated Identity ONNX model and is runtime-integration evidence only, not segmentation accuracy evidence.
 - Pinned TensorRT 10.16.1.11 because it exposes explicit FP16 precision control. FP32 and FP16 generated-model engine build/execution smoke both pass locally (2 passed).
 - Selected the MIT-licensed ONNX Model Zoo FCN-ResNet50 opset-11 semantic-segmentation candidate and recorded source checksums. Its FP32 TensorRT engine parses and builds with a fixed `1x3x520x520` profile. The full-model FP16 build has not yet produced a completed engine artifact and remains unresolved.
+- Implemented FCN RGB resize/normalization and primary label-map hashing. On the downloaded sample image, ONNX reference and TensorRT FP32 output shapes were equal and primary pixel-label agreement was 99.9815%; raw output checksums differed, so exact float equality is not used as the parity criterion.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
 - Unit tests: 18 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
@@ -33,7 +34,7 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 
 ## Next task
 
-Implement FCN-specific resize/normalization and output decoding, then execute the selected model through the ONNX reference and FP32 TensorRT paths before diagnosing the full-model FP16 build.
+Create a small multi-image replay fixture and formalize output-parity KPI (label agreement), then diagnose the full-model FP16 build.
 
 ## Historical baseline
 

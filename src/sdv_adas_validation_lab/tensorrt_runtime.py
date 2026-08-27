@@ -11,7 +11,7 @@ import tensorrt as trt
 from cuda.bindings import runtime as cudart
 
 from .contract import SensorFrame
-from .runtime import Prediction, OnnxReferenceRuntime
+from .runtime import Prediction, _prediction, preprocess_rgb8
 
 
 def _check(result: tuple[object, ...], operation: str) -> tuple[object, ...]:
@@ -62,13 +62,14 @@ def build_engine(
 class TensorRtRuntime:
   """Static-shape TensorRT adapter using the same preprocessing as the ONNX reference."""
 
-  def __init__(self, engine_path: Path) -> None:
+  def __init__(self, engine_path: Path, *, profile: str = "unit") -> None:
     logger = trt.Logger(trt.Logger.ERROR)
     self._runtime = trt.Runtime(logger)
     self._engine = self._runtime.deserialize_cuda_engine(engine_path.read_bytes())
     if self._engine is None:
       raise ValueError(f"could not deserialize TensorRT engine: {engine_path}")
     self._context = self._engine.create_execution_context()
+    self.profile = profile
     self._input_name = next(
       self._engine.get_tensor_name(index)
       for index in range(self._engine.num_io_tensors)
@@ -81,7 +82,7 @@ class TensorRtRuntime:
     )
 
   def infer(self, frame: SensorFrame) -> Prediction:
-    value = OnnxReferenceRuntime.preprocess(frame)
+    value = preprocess_rgb8(frame, profile=self.profile)
     started_ns = monotonic_ns()
     stream, = _check(cudart.cudaStreamCreate(), "stream create")
     allocations: list[int] = []
@@ -92,6 +93,8 @@ class TensorRtRuntime:
         cudart.cudaMemcpyAsync(input_ptr, value.ctypes.data, value.nbytes, cudart.cudaMemcpyKind.cudaMemcpyHostToDevice, stream),
         "input copy",
       )
+      if not self._context.set_input_shape(self._input_name, value.shape):
+        raise ValueError(f"TensorRT engine does not accept input shape {value.shape}")
       self._context.set_tensor_address(self._input_name, input_ptr)
       outputs: list[np.ndarray] = []
       for name in self._output_names:
@@ -109,7 +112,7 @@ class TensorRtRuntime:
           f"output copy {name}",
         )
       _check(cudart.cudaStreamSynchronize(stream), "stream synchronize")
-      return Prediction(frame.frame_id, started_ns, monotonic_ns(), tuple(tuple(output.shape) for output in outputs))
+      return _prediction(frame.frame_id, started_ns, monotonic_ns(), outputs)
     finally:
       for pointer in allocations:
         cudart.cudaFree(pointer)
