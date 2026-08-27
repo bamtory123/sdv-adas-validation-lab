@@ -1,7 +1,7 @@
 runtime:
   python: "3.12"
   onnxruntime_gpu: "1.29.0"
-  tensorrt: "11.2.1.2"
+  tensorrt: "10.16.1.11"
 hardware:
   platform: "WSL2"
   gpu: "NVIDIA GeForce RTX 4080"
