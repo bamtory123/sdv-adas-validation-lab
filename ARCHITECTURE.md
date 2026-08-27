@@ -47,3 +47,7 @@ Each run eventually writes an isolated output directory containing:
 3. Compare runtimes with identical frames, preprocessing, output decoding, warm-up policy, and measurement window.
 4. Preserve invalid attempts and retries; do not silently discard them.
 5. `validity` answers whether a run can be evaluated; `outcome` answers whether evaluated KPI thresholds passed.
+
+## Current reference-runtime contract
+
+The implemented reference adapter accepts `rgb8` frames whose byte count is exactly `width * height * 3`, converts them to contiguous NCHW `float32` in `[0,1]`, and writes per-frame inference latency and output shapes. Model-specific decoding and accuracy KPI await the selected segmentation model.

@@ -16,19 +16,20 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 - Added JSONL file-backed and deterministic synthetic replay sources.
 - Added a non-blocking delay/drop queue. Producer submission never sleeps; the publisher releases frames only at a monotonic deadline. Zero delay uses the same queue path.
 - Added a repeatable replay/fault CLI which writes isolated `manifest.json`, `frames.csv`, `events.jsonl`, and `summary.json` artifacts per run.
+- Added an ONNX Runtime reference adapter with fixed RGB8-to-NCHW float32 `[0,1]` preprocessing. Published frames can now produce per-frame `predictions.csv` latency and output-shape records.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
-- Unit tests: 15 passed on 2026-08-28.
+- Unit tests: 18 passed on 2026-08-28.
 
 ## Not yet implemented
 
 - Replay source content hashing, stream coverage checks, and the dataset/model decision gate.
-- Reference inference, TensorRT engine build, FP32/FP16 comparison.
+- A redistribution-compatible segmentation model, model-specific output decoding, TensorRT engine build, and FP32/FP16 comparison.
 - Fault queue, run state machine, manifest, KPI, verdict, report, batch runner, CI, and formal experiments.
 
 ## Next task
 
-Implement a fixed ONNX reference model and preprocessing path over the replay interface; then compare its deterministic output before adding TensorRT engine builds.
+Choose and pin the segmentation model/dataset fixture, then add TensorRT FP32 engine building and compare its decoded output to the ONNX reference runtime.
 
 ## Historical baseline
 
