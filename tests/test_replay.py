@@ -9,6 +9,7 @@ def test_synthetic_replay_is_repeatable() -> None:
   source = ReplaySource.synthetic(3)
   assert [frame.frame_id for frame in source] == [0, 1, 2]
   assert len(source) == 3
+  assert source.content_hash == ReplaySource.synthetic(3).content_hash
 
 
 def test_jsonl_replay_loads_image_bytes(tmp_path) -> None:

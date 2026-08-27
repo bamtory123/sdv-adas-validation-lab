@@ -14,6 +14,7 @@ def test_repeated_harness_writes_isolated_artifacts(tmp_path) -> None:
   assert len(runs) == 2
   assert all((run / "manifest.json").exists() and (run / "frames.csv").exists() for run in runs)
   assert json.loads((runs[0] / "summary.json").read_text())["validity"] == "valid"
+  assert json.loads((runs[0] / "manifest.json").read_text())["source_hash"]
   assert summaries[0]["coverage"] == 1.0
   assert summaries[0]["transport_delay"]["max_ms"] is not None
 

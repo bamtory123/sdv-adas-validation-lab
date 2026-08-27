@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from pathlib import Path
 
 from .contract import FrameStatus, SensorFrame
@@ -21,6 +22,14 @@ class ReplaySource:
 
   def __len__(self) -> int:
     return len(self._frames)
+
+  @property
+  def content_hash(self) -> str:
+    digest = hashlib.sha256()
+    for frame in self._frames:
+      digest.update(f"{frame.frame_id}:{frame.capture_monotonic_ns}:{frame.width}:{frame.height}:{frame.pixel_format}\n".encode())
+      digest.update(frame.image)
+    return digest.hexdigest()
 
   @classmethod
   def from_jsonl(cls, manifest_path: Path) -> "ReplaySource":

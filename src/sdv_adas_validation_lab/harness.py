@@ -7,6 +7,7 @@ import csv
 import json
 import math
 import statistics
+import subprocess
 import time
 from dataclasses import asdict
 from pathlib import Path
@@ -41,6 +42,15 @@ def _timing_stats(values: list[int]) -> dict[str, float | None]:
     "p95_ms": ordered[p95_index] / 1_000_000,
     "max_ms": ordered[-1] / 1_000_000,
   }
+
+
+def _git_state() -> dict[str, object]:
+  try:
+    commit = subprocess.run(["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True).stdout.strip()
+    dirty = bool(subprocess.run(["git", "status", "--porcelain"], check=True, capture_output=True, text=True).stdout.strip())
+    return {"commit": commit, "dirty": dirty}
+  except (OSError, subprocess.CalledProcessError):
+    return {"commit": None, "dirty": None}
 
 
 def _write_predictions(path: Path, predictions: list[Prediction]) -> None:
@@ -116,7 +126,11 @@ def run_once(
     "inference_latency": _timing_stats([prediction.latency_ns for prediction in predictions]),
   }
   (output_dir / "manifest.json").write_text(
-    json.dumps({"preflight": collect(), "fault": asdict(fault), "source_frames": len(source)}, indent=2) + "\n",
+    json.dumps(
+      {"preflight": collect(), "git": _git_state(), "fault": asdict(fault), "source_frames": len(source), "source_hash": source.content_hash},
+      indent=2,
+    )
+    + "\n",
     encoding="utf-8",
   )
   (output_dir / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
