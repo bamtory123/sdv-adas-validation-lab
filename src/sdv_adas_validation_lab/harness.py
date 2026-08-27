@@ -142,10 +142,17 @@ def run_once(
 
 
 def run_repeated(
-  source: ReplaySource, fault: FaultConfig, output_root: Path, repeats: int, runtime: RuntimeAdapter | None = None
+  source: ReplaySource,
+  fault: FaultConfig,
+  output_root: Path,
+  repeats: int,
+  runtime: RuntimeAdapter | None = None,
+  warmups: int = 0,
 ) -> list[dict[str, object]]:
-  if repeats <= 0:
-    raise ValueError("repeats must be positive")
+  if repeats <= 0 or warmups < 0:
+    raise ValueError("repeats must be positive and warmups non-negative")
+  for index in range(1, warmups + 1):
+    run_once(source, fault, output_root / f"warmup-{index:03d}-{uuid4().hex[:8]}", runtime)
   return [run_once(source, fault, output_root / f"run-{index:03d}-{uuid4().hex[:8]}", runtime) for index in range(1, repeats + 1)]
 
 
@@ -157,6 +164,7 @@ def main() -> None:
   parser.add_argument("--drop-every", type=int, default=0)
   parser.add_argument("--max-pending", type=int, default=256)
   parser.add_argument("--repeats", type=int, default=1)
+  parser.add_argument("--warmups", type=int, default=0)
   parser.add_argument("--onnx-model", type=Path)
   parser.add_argument("--tensorrt-engine", type=Path)
   parser.add_argument("--provider", default="CPUExecutionProvider")
@@ -173,7 +181,9 @@ def main() -> None:
     if args.tensorrt_engine
     else None
   )
-  summaries = run_repeated(source, FaultConfig(args.delay_ms, args.drop_every, args.max_pending), args.output, args.repeats, runtime)
+  summaries = run_repeated(
+    source, FaultConfig(args.delay_ms, args.drop_every, args.max_pending), args.output, args.repeats, runtime, args.warmups
+  )
   print(json.dumps(summaries, indent=2))
 
 

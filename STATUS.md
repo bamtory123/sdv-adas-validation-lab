@@ -33,9 +33,10 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 - Added a GitHub Actions CPU-only workflow for unit tests and report generation. TensorRT engine smoke remains an explicit local GPU test.
 - GitHub Actions CI passed after GPU-free preflight handling was added.
 - Retained a pre-formal FCN FP16 delay matrix: 0/50/100/150 ms, three runs per condition, all `valid/pass` with coverage 1.0. The first-run warm-up effect is not yet excluded, so these artifacts demonstrate repeatability plumbing rather than formal release KPI.
+- Added `--warmups`: warm-up runs are retained in distinct artifact directories but excluded from returned measured results and reports.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
-- Unit tests: 24 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
+- Unit tests: 25 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
 
 ## Not yet implemented
 
@@ -45,7 +46,7 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 
 ## Next task
 
-Implement warm-up exclusion and an experiment manifest, then repeat the runtime/delay matrix as formal evidence.
+Add an experiment manifest, then repeat the runtime/delay matrix with warm-up exclusion as formal evidence.
 
 ## Historical baseline
 

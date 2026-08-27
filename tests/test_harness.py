@@ -37,3 +37,10 @@ def test_queue_overflow_is_invalid_not_evaluated(tmp_path) -> None:
   summary = run_repeated(ReplaySource.synthetic(3, period_ns=1), FaultConfig(delay_ms=100, max_pending=1), tmp_path, repeats=1)[0]
   assert (summary["validity"], summary["outcome"]) == ("invalid", "not_evaluated")
   assert summary["invalid_events"] > 0
+
+
+def test_warmup_artifact_is_excluded_from_returned_measurements(tmp_path) -> None:
+  summaries = run_repeated(ReplaySource.synthetic(2), FaultConfig(), tmp_path, repeats=1, warmups=1)
+  assert len(summaries) == 1
+  assert len(list(tmp_path.glob("warmup-*"))) == 1
+  assert len(list(tmp_path.glob("run-*"))) == 1
