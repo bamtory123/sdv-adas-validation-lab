@@ -21,8 +21,8 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 
 ## Immediate execution order
 
-1. Add larger licensed replay coverage and ground-truth accuracy KPI.
-2. Repeat the runtime/delay matrix against that coverage and retain individual valid, fail, and invalid artifacts.
+1. Select a labeled, license-cleared replay source and explicit class mapping.
+2. Connect ground-truth accuracy KPI, then repeat the runtime/delay matrix against that coverage and retain individual valid, fail, and invalid artifacts.
 3. Generate the final Markdown report and sample-result release artifacts.
 4. Extend the shared delay/drop queue with formal run state and manifest/KPI/verdict reporting.
 

@@ -11,3 +11,7 @@
 - Outputs: `out` and `aux`, each with 21 VOC classes. `out` is the primary segmentation output.
 
 Raw models, images, replay data, and TensorRT engines are local artifacts and must not be committed. This choice enables runtime and output-parity work; it does not establish ADAS or vehicle-performance accuracy.
+
+## Accuracy-data boundary
+
+The Model Zoo sample-data archive includes ONNX test inputs and golden outputs, not semantic ground-truth labels. Those tensors are valid for ONNX regression checks only; they must not be reported as segmentation accuracy. The repository has a tested mIoU/pixel-accuracy metric implementation, but a final accuracy result requires a separately licensed labeled replay source with an explicit class mapping.
