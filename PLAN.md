@@ -21,9 +21,9 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 
 ## Immediate execution order
 
-1. Persist FCN parity run manifests and verdicts with the same artifact conventions as the replay/fault harness.
-2. Diagnose the incomplete FCN FP16 engine build, then compare decoded outputs from both TensorRT precisions to the ONNX reference.
-3. Add transport-delay fault conditions to the FCN runtime experiment and calculate timing/coverage KPI.
+1. Diagnose the incomplete FCN FP16 engine build, then compare decoded outputs from both TensorRT precisions to the ONNX reference.
+2. Add transport-delay fault conditions to the FCN runtime experiment and calculate timing/coverage KPI.
+3. Add source-content hash and Git state to every run manifest, then build batch report generation.
 4. Extend the shared delay/drop queue with formal run state and manifest/KPI/verdict reporting.
 
 ## Formal v0.1 experiment matrix

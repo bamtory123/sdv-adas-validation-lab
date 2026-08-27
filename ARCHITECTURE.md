@@ -34,7 +34,7 @@ The parity comparator uses the same `ReplaySource` frames for both runtimes and 
 
 ## Run artifacts
 
-Each run eventually writes an isolated output directory containing:
+The implemented parity run writes an isolated output directory containing:
 
 - `manifest.json`: actual environment, Git state, command, hashes, and configuration.
 - `frames.csv`: source/fault timestamps, queue depth, publish/drop outcome.
