@@ -30,6 +30,7 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 - Added CPU-only Markdown batch report generation over run `summary.json` files, with validity/outcome, actual median delay, inference latency, and coverage columns.
 - Configured frame drops are now counted separately from unexpected loss. A six-frame delay/drop smoke (50 ms, every second frame dropped) produced 3 published and 3 expected drops with coverage 1.0 and `valid/pass`.
 - Added queue-capacity control and overflow coverage. A three-frame, 100 ms, depth-one smoke produced two overflow events and correctly returned `invalid/not_evaluated`.
+- Added a GitHub Actions CPU-only workflow for unit tests and report generation. TensorRT engine smoke remains an explicit local GPU test.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
 - Unit tests: 24 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
