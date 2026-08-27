@@ -25,3 +25,9 @@ def test_harness_writes_predictions_when_runtime_is_supplied(tmp_path) -> None:
   summary = run_repeated(ReplaySource.synthetic(2), FaultConfig(), output, repeats=1, runtime=runtime)[0]
   assert summary["inference_frames"] == 2
   assert (next(output.iterdir()) / "predictions.csv").exists()
+
+
+def test_configured_drop_preserves_expected_coverage(tmp_path) -> None:
+  summary = run_repeated(ReplaySource.synthetic(3), FaultConfig(drop_every=2), tmp_path, repeats=1)[0]
+  assert (summary["dropped_frames"], summary["expected_dropped_frames"], summary["coverage"]) == (1, 1, 1.0)
+  assert summary["outcome"] == "pass"

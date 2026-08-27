@@ -28,9 +28,10 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 - Added actual transport-delay and inference-latency KPI to replay run summaries. FCN FP16 smoke runs for target 0/50/100/150 ms had coverage 1.0 and median actual transport delay of approximately 0.01/55.56/106.30/153.93 ms. These are one-repeat, two-frame queue/KPI integration checks, not formal benchmark evidence.
 - Replay harness manifests now include deterministic source-content SHA-256 and the executing Git commit/dirty state.
 - Added CPU-only Markdown batch report generation over run `summary.json` files, with validity/outcome, actual median delay, inference latency, and coverage columns.
+- Configured frame drops are now counted separately from unexpected loss. A six-frame delay/drop smoke (50 ms, every second frame dropped) produced 3 published and 3 expected drops with coverage 1.0 and `valid/pass`.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
-- Unit tests: 22 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
+- Unit tests: 23 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
 
 ## Not yet implemented
 
@@ -40,7 +41,7 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 
 ## Next task
 
-Add drop-fault coverage and failure/invalid verdict tests, then retain repeated runtime/delay artifacts for the formal matrix.
+Add queue-overflow invalid-run coverage, then retain repeated runtime/delay artifacts for the formal matrix.
 
 ## Historical baseline
 

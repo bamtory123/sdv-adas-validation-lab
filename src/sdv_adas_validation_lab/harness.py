@@ -106,6 +106,8 @@ def run_once(
   invalid = [event for event in events if event.kind == "invalid"]
   published = [event for event in events if event.kind == "published"]
   dropped = [event for event in events if event.kind == "dropped"]
+  expected_frames = len(source) - len(dropped)
+  unexpected_missing = max(0, expected_frames - len(published) - len(invalid))
   with (output_dir / "frames.csv").open("w", newline="", encoding="utf-8") as output:
     writer = csv.DictWriter(output, fieldnames=list(asdict(events[0]).keys()))
     writer.writeheader()
@@ -115,13 +117,15 @@ def run_once(
     _write_predictions(output_dir / "predictions.csv", predictions)
   summary = {
     "validity": "invalid" if invalid else "valid",
-    "outcome": "not_evaluated" if invalid else "pass",
+    "outcome": "not_evaluated" if invalid else "fail" if unexpected_missing else "pass",
     "captured_frames": len(source),
     "published_frames": len(published),
     "dropped_frames": len(dropped),
+    "expected_dropped_frames": len(dropped),
     "invalid_events": len(invalid),
+    "unexpected_missing_frames": unexpected_missing,
     "inference_frames": len(predictions),
-    "coverage": len(published) / len(source),
+    "coverage": len(published) / expected_frames if expected_frames else 1.0,
     "transport_delay": _timing_stats([event.actual_delay_ns for event in published if event.actual_delay_ns is not None]),
     "inference_latency": _timing_stats([prediction.latency_ns for prediction in predictions]),
   }
