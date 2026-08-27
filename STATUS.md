@@ -36,9 +36,10 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 - Added `--warmups`: warm-up runs are retained in distinct artifact directories but excluded from returned measured results and reports.
 - Added a batch delay-experiment runner with `experiment_manifest.json`. A warm-up-excluded FCN FP16 matrix completed: four delay conditions × three measured runs, all `valid/pass`, coverage 1.0. Its report excludes warm-up directories. This is a two-image micro-fixture validation of execution mechanics, not the final release benchmark.
 - Inspected the Model Zoo FCN archive: it provides ONNX golden outputs, not semantic ground-truth labels. Added tested pixel-accuracy/mIoU calculation with ignored-label support; a final accuracy result remains blocked on a labeled, license-cleared replay source and class mapping.
+- Added a label-evaluation adapter: indexed/grayscale label PNGs are resized only with nearest-neighbor sampling and aggregated with runtime label maps for pixel accuracy/mIoU.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
-- Unit tests: 31 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
+- Unit tests: 33 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
 
 ## Not yet implemented
 
@@ -48,7 +49,7 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 
 ## Next task
 
-Select a labeled, license-cleared replay source and class mapping, then connect ground-truth accuracy to the FCN run artifacts.
+Select a labeled, license-cleared replay source and FCN/VOC class mapping, then run the label-evaluation adapter over real artifacts.
 
 ## Historical baseline
 
