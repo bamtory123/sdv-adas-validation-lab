@@ -18,12 +18,15 @@ def _version(package: str) -> str | None:
 
 
 def _gpu() -> list[str]:
-  result = subprocess.run(
-    ["nvidia-smi", "--query-gpu=name,driver_version,memory.total", "--format=csv,noheader"],
-    check=False,
-    capture_output=True,
-    text=True,
-  )
+  try:
+    result = subprocess.run(
+      ["nvidia-smi", "--query-gpu=name,driver_version,memory.total", "--format=csv,noheader"],
+      check=False,
+      capture_output=True,
+      text=True,
+    )
+  except OSError:
+    return []
   return result.stdout.splitlines() if result.returncode == 0 else []
 
 
