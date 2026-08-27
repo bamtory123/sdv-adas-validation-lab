@@ -52,4 +52,4 @@ Each run eventually writes an isolated output directory containing:
 
 The implemented reference adapter accepts `rgb8` frames whose byte count is exactly `width * height * 3`, converts them to contiguous NCHW `float32` in `[0,1]`, and writes per-frame inference latency and output shapes. Model-specific decoding and accuracy KPI await the selected segmentation model.
 
-The implemented TensorRT adapter builds a local static-shape FP32 engine, allocates CUDA buffers/stream per inference, and uses the same preprocessing. Engine files stay local and are excluded from Git.
+The implemented TensorRT adapter builds local static-shape FP32 or FP16 engines, allocates CUDA buffers/stream per inference, and uses the same preprocessing. TensorRT 10.16.1.11 is pinned because it exposes explicit FP16 build control. Engine files stay local and are excluded from Git.

@@ -10,7 +10,7 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 
 - Public repository created: `bamtory123/sdv-adas-validation-lab`.
 - WSL2 runtime verified on NVIDIA GeForce RTX 4080, driver 610.47.
-- Installed and import-verified: ONNX 1.22.0, ONNX Runtime GPU 1.29.0, TensorRT 11.2.1.2.
+- Installed and import-verified: ONNX 1.22.0, ONNX Runtime GPU 1.29.0, TensorRT 10.16.1.11.
 - Added `SensorFrame` contract (`sensor-frame/v1`) with immutable fields and basic validation.
 - Added stream monotonicity validation.
 - Added JSONL file-backed and deterministic synthetic replay sources.
@@ -19,9 +19,10 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 - Added an ONNX Runtime reference adapter with fixed RGB8-to-NCHW float32 `[0,1]` preprocessing. Published frames can now produce per-frame `predictions.csv` latency and output-shape records.
 - Added local TensorRT FP32 engine build and static-shape direct GPU execution via CUDA Python bindings. TensorRT is selectable in the same replay/fault harness as the ONNX reference runtime.
 - GPU smoke-tested two repeated TensorRT runs: 5 synthetic frames, 5 ms delay, no configured drops; each produced 5 published and inferred frames with `valid/pass`. This uses a generated Identity ONNX model and is runtime-integration evidence only, not segmentation accuracy evidence.
+- Pinned TensorRT 10.16.1.11 because it exposes explicit FP16 precision control. FP32 and FP16 generated-model engine build/execution smoke both pass locally (2 passed).
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
-- Unit tests: 18 passed on 2026-08-28.
+- Unit tests: 18 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
 
 ## Not yet implemented
 

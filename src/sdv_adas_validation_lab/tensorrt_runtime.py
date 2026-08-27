@@ -41,8 +41,6 @@ def build_engine(model_path: Path, engine_path: Path, *, precision: str = "fp32"
   config = builder.create_builder_config()
   config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 256 * 1024 * 1024)
   if precision == "fp16":
-    if not builder.platform_has_fast_fp16:
-      raise RuntimeError("GPU does not support fast FP16")
     config.set_flag(trt.BuilderFlag.FP16)
   serialized = builder.build_serialized_network(network, config)
   if serialized is None:
