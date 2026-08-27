@@ -20,10 +20,11 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 - Added local TensorRT FP32 engine build and static-shape direct GPU execution via CUDA Python bindings. TensorRT is selectable in the same replay/fault harness as the ONNX reference runtime.
 - GPU smoke-tested two repeated TensorRT runs: 5 synthetic frames, 5 ms delay, no configured drops; each produced 5 published and inferred frames with `valid/pass`. This uses a generated Identity ONNX model and is runtime-integration evidence only, not segmentation accuracy evidence.
 - Pinned TensorRT 10.16.1.11 because it exposes explicit FP16 precision control. FP32 and FP16 generated-model engine build/execution smoke both pass locally (2 passed).
-- Selected the MIT-licensed ONNX Model Zoo FCN-ResNet50 opset-11 semantic-segmentation candidate and recorded source checksums. Its FP32 TensorRT engine parses and builds with a fixed `1x3x520x520` profile. The full-model FP16 build has not yet produced a completed engine artifact and remains unresolved.
+- Selected the MIT-licensed ONNX Model Zoo FCN-ResNet50 opset-11 semantic-segmentation candidate and recorded source checksums. Its FP32 and FP16 TensorRT engines parse and build with a fixed `1x3x520x520` profile.
 - Implemented FCN RGB resize/normalization and primary label-map hashing. On the downloaded sample image, ONNX reference and TensorRT FP32 output shapes were equal and primary pixel-label agreement was 99.9815%; raw output checksums differed, so exact float equality is not used as the parity criterion.
 - Added a local fixture preparer and multi-image parity CLI. On both provided FCN samples (540,800 resized pixels), TensorRT FP32 achieved 99.9906% primary label agreement against the ONNX reference. This is runtime parity, not ground-truth segmentation accuracy.
 - Promoted parity output to an isolated run artifact: `manifest.json` records preflight and source/model/engine SHA-256; `summary.json` separates `validity` and `outcome`; `events.jsonl` records state transitions. The two-image FCN FP32 run is `valid/pass` with a 0.999 agreement threshold.
+- The same two-image parity run for FCN TensorRT FP16 is `valid/pass`: 540,627 of 540,800 primary labels agree with ONNX reference (99.9680%). The local serialized FP16 engine is about 68MB and remains untracked.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
 - Unit tests: 21 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
@@ -36,7 +37,7 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 
 ## Next task
 
-Diagnose the incomplete FCN FP16 build, then add transport-delay fault conditions and timing/coverage KPI to the FCN runtime experiment.
+Add transport-delay fault conditions and timing/coverage KPI to the FCN runtime experiment.
 
 ## Historical baseline
 
