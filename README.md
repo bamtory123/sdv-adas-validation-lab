@@ -10,6 +10,7 @@ Reproducible, offline validation of a camera frame contract, replay pipeline, tr
 - Replay-ready immutable frame representation
 - Stream-integrity validation and unit tests
 - Environment preflight recorded in run manifests
+- JSONL/synthetic replay and repeatable non-blocking delay/drop fault smoke harness
 
 Openpilot/MetaDrive work remains a separate `v0.2` closed-loop adapter baseline; it is not copied into this repository.
 

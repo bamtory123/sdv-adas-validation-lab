@@ -4,7 +4,7 @@ Last updated: 2026-08-28 (Asia/Seoul)
 
 ## Current state
 
-Phase 0 and Phase 1 are underway. The repository and independent WSL environment exist; the sensor contract and basic stream validator are tested. No model, replay dataset, TensorRT engine, fault queue, formal benchmark, or release result exists yet.
+Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementation. The repository and independent WSL environment exist. No model, real replay dataset, TensorRT engine, formal benchmark, or release result exists yet.
 
 ## Completed
 
@@ -13,18 +13,22 @@ Phase 0 and Phase 1 are underway. The repository and independent WSL environment
 - Installed and import-verified: ONNX 1.22.0, ONNX Runtime GPU 1.29.0, TensorRT 11.2.1.2.
 - Added `SensorFrame` contract (`sensor-frame/v1`) with immutable fields and basic validation.
 - Added stream monotonicity validation.
+- Added JSONL file-backed and deterministic synthetic replay sources.
+- Added a non-blocking delay/drop queue. Producer submission never sleeps; the publisher releases frames only at a monotonic deadline. Zero delay uses the same queue path.
+- Added a repeatable replay/fault CLI which writes isolated `manifest.json`, `frames.csv`, `events.jsonl`, and `summary.json` artifacts per run.
+- Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
-- Unit tests: 8 passed on 2026-08-28.
+- Unit tests: 15 passed on 2026-08-28.
 
 ## Not yet implemented
 
-- Replay source and dataset/model decision gate.
+- Replay source content hashing, stream coverage checks, and the dataset/model decision gate.
 - Reference inference, TensorRT engine build, FP32/FP16 comparison.
 - Fault queue, run state machine, manifest, KPI, verdict, report, batch runner, CI, and formal experiments.
 
 ## Next task
 
-Implement a deterministic replay fixture and the Phase 1 `ReplaySource`, then expand stream-preflight tests for sequence, timestamp, dimensions, and coverage.
+Implement a fixed ONNX reference model and preprocessing path over the replay interface; then compare its deterministic output before adding TensorRT engine builds.
 
 ## Historical baseline
 

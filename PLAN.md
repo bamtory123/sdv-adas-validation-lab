@@ -14,18 +14,17 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 | 1 | Versioned `SensorFrame`, replay source, stream preflight | contract and replay fixture tests | In progress |
 | 2 | ONNX reference runtime and fixed preprocessing | deterministic output on sample frames | Pending |
 | 3 | TensorRT FP32/FP16 build and runtime | output comparison and local GPU smoke | Pending |
-| 4 | Non-blocking delay/drop faults | fake-clock FIFO/deadline/overflow tests | Pending |
+| 4 | Non-blocking delay/drop faults | fake-clock FIFO/deadline/overflow tests | In progress |
 | 5 | Manifest, KPI, verdict, batch runner, report | hand-calculated KPI and report fixture tests | Pending |
 | 6 | Formal experiments and evidence | 3 retained runs per runtime/fault condition | Pending |
 | 7 | Portfolio release | CI, documentation, sample results, tagged release | Pending |
 
 ## Immediate execution order
 
-1. Complete Phase 0 run preflight and manifest schema.
-2. Complete Phase 1 deterministic replay input plus stream validation coverage.
-3. Implement the ONNX reference runtime before any TensorRT engine work.
-4. Add TensorRT FP32, then FP16; compare outputs before benchmarking.
-5. Add the shared asynchronous fault queue, then KPI/verdict/reporting.
+1. Complete Phase 1 replay-manifest coverage checks and source-content hashing.
+2. Implement the ONNX reference runtime before any TensorRT engine work.
+3. Add TensorRT FP32, then FP16; compare outputs before benchmarking.
+4. Extend the shared delay/drop queue with formal run state and manifest/KPI/verdict reporting.
 
 ## Formal v0.1 experiment matrix
 

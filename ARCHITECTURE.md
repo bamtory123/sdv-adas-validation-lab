@@ -19,7 +19,7 @@ ReplaySource -> SensorFrame -> StreamValidator -> FaultQueue -> RuntimeAdapter
 - `ReplaySource`: deterministic recorded-frame input. The only v0.1 source.
 - `SensorFrame`: immutable, versioned contract. IDs and monotonic timestamps are the shared truth between stages.
 - `StreamValidator`: rejects malformed, non-monotonic, missing, or incompatible input before a benchmark.
-- `FaultQueue`: a non-blocking publisher path. Every delay condition, including 0 ms, uses the same queue. Queue overflow is invalid.
+- `FaultQueue`: a non-blocking publisher path. Every delay condition, including 0 ms, uses the same queue. Deterministic configured drops are recorded; queue overflow is invalid.
 - `RuntimeAdapter`: reference ONNX Runtime, TensorRT FP32, or TensorRT FP16 with identical preprocessing and output decoding.
 - `KPI / verdict / report`: separates execution validity from performance outcome and generates reproducible artifacts.
 
