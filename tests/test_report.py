@@ -11,3 +11,13 @@ def test_report_renders_run_summary(tmp_path) -> None:
   )
   text = render(tmp_path)
   assert "| run-001 | valid | pass | 50 | 4 | 1.0 |" in text
+
+
+def test_report_excludes_warmup_runs(tmp_path) -> None:
+  for name in ("warmup-001", "run-001"):
+    path = tmp_path / name
+    path.mkdir()
+    (path / "summary.json").write_text(json.dumps({"validity": "valid", "outcome": "pass"}))
+  text = render(tmp_path)
+  assert "warmup-001" not in text
+  assert "run-001" in text

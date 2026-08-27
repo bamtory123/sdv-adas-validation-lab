@@ -10,6 +10,8 @@ from pathlib import Path
 def render(output_root: Path) -> str:
   rows: list[str] = []
   for summary_path in sorted(output_root.rglob("summary.json")):
+    if summary_path.parent.name.startswith("warmup-"):
+      continue
     data = json.loads(summary_path.read_text(encoding="utf-8"))
     delay = data.get("transport_delay", {}).get("median_ms", "-")
     latency = data.get("inference_latency", {}).get("median_ms", "-")
