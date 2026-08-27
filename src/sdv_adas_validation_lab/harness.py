@@ -155,6 +155,7 @@ def main() -> None:
   parser.add_argument("--synthetic-frames", type=int, default=0)
   parser.add_argument("--delay-ms", type=int, default=0)
   parser.add_argument("--drop-every", type=int, default=0)
+  parser.add_argument("--max-pending", type=int, default=256)
   parser.add_argument("--repeats", type=int, default=1)
   parser.add_argument("--onnx-model", type=Path)
   parser.add_argument("--tensorrt-engine", type=Path)
@@ -172,7 +173,7 @@ def main() -> None:
     if args.tensorrt_engine
     else None
   )
-  summaries = run_repeated(source, FaultConfig(args.delay_ms, args.drop_every), args.output, args.repeats, runtime)
+  summaries = run_repeated(source, FaultConfig(args.delay_ms, args.drop_every, args.max_pending), args.output, args.repeats, runtime)
   print(json.dumps(summaries, indent=2))
 
 

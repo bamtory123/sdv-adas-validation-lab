@@ -31,3 +31,9 @@ def test_configured_drop_preserves_expected_coverage(tmp_path) -> None:
   summary = run_repeated(ReplaySource.synthetic(3), FaultConfig(drop_every=2), tmp_path, repeats=1)[0]
   assert (summary["dropped_frames"], summary["expected_dropped_frames"], summary["coverage"]) == (1, 1, 1.0)
   assert summary["outcome"] == "pass"
+
+
+def test_queue_overflow_is_invalid_not_evaluated(tmp_path) -> None:
+  summary = run_repeated(ReplaySource.synthetic(3, period_ns=1), FaultConfig(delay_ms=100, max_pending=1), tmp_path, repeats=1)[0]
+  assert (summary["validity"], summary["outcome"]) == ("invalid", "not_evaluated")
+  assert summary["invalid_events"] > 0

@@ -21,9 +21,9 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 
 ## Immediate execution order
 
-1. Add queue-overflow invalid verdict coverage.
-2. Repeat the runtime/delay matrix and retain individual valid, fail, and invalid artifacts.
-3. Generate the final Markdown report and sample-result release artifacts.
+1. Repeat the runtime/delay matrix and retain individual valid, fail, and invalid artifacts.
+2. Generate the final Markdown report and sample-result release artifacts.
+3. Add a CPU-only CI workflow for tests and report fixtures.
 4. Extend the shared delay/drop queue with formal run state and manifest/KPI/verdict reporting.
 
 ## Formal v0.1 experiment matrix

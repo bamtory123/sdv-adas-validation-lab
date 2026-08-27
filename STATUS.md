@@ -29,9 +29,10 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 - Replay harness manifests now include deterministic source-content SHA-256 and the executing Git commit/dirty state.
 - Added CPU-only Markdown batch report generation over run `summary.json` files, with validity/outcome, actual median delay, inference latency, and coverage columns.
 - Configured frame drops are now counted separately from unexpected loss. A six-frame delay/drop smoke (50 ms, every second frame dropped) produced 3 published and 3 expected drops with coverage 1.0 and `valid/pass`.
+- Added queue-capacity control and overflow coverage. A three-frame, 100 ms, depth-one smoke produced two overflow events and correctly returned `invalid/not_evaluated`.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
-- Unit tests: 23 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
+- Unit tests: 24 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
 
 ## Not yet implemented
 
@@ -41,7 +42,7 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 
 ## Next task
 
-Add queue-overflow invalid-run coverage, then retain repeated runtime/delay artifacts for the formal matrix.
+Retain repeated runtime/delay artifacts for the formal matrix, then generate release-ready sample report artifacts.
 
 ## Historical baseline
 
