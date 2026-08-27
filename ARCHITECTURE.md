@@ -25,6 +25,8 @@ ReplaySource -> SensorFrame -> StreamValidator -> FaultQueue -> RuntimeAdapter
 
 The parity comparator uses the same `ReplaySource` frames for both runtimes and aggregates primary segmentation label agreement. It is a runtime-consistency KPI; ground-truth accuracy requires labeled data and is tracked separately.
 
+The replay harness records actual publish delay rather than only the requested fault delay, plus inference latency and published/captured coverage. This isolates transport scheduling from runtime execution time.
+
 ## Boundary and versions
 
 - Host: Windows + WSL2; GPU: NVIDIA GeForce RTX 4080.

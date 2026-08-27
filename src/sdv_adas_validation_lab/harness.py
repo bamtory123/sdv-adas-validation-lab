@@ -5,6 +5,8 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
+import statistics
 import time
 from dataclasses import asdict
 from pathlib import Path
@@ -27,6 +29,18 @@ def _write_events(path: Path, events: list[FrameEvent]) -> None:
   with path.open("w", encoding="utf-8") as output:
     for event in events:
       output.write(json.dumps(asdict(event), sort_keys=True) + "\n")
+
+
+def _timing_stats(values: list[int]) -> dict[str, float | None]:
+  if not values:
+    return {"median_ms": None, "p95_ms": None, "max_ms": None}
+  ordered = sorted(values)
+  p95_index = max(0, math.ceil(len(ordered) * 0.95) - 1)
+  return {
+    "median_ms": statistics.median(ordered) / 1_000_000,
+    "p95_ms": ordered[p95_index] / 1_000_000,
+    "max_ms": ordered[-1] / 1_000_000,
+  }
 
 
 def _write_predictions(path: Path, predictions: list[Prediction]) -> None:
@@ -97,6 +111,9 @@ def run_once(
     "dropped_frames": len(dropped),
     "invalid_events": len(invalid),
     "inference_frames": len(predictions),
+    "coverage": len(published) / len(source),
+    "transport_delay": _timing_stats([event.actual_delay_ns for event in published if event.actual_delay_ns is not None]),
+    "inference_latency": _timing_stats([prediction.latency_ns for prediction in predictions]),
   }
   (output_dir / "manifest.json").write_text(
     json.dumps({"preflight": collect(), "fault": asdict(fault), "source_frames": len(source)}, indent=2) + "\n",

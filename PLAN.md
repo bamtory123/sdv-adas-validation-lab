@@ -21,9 +21,9 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 
 ## Immediate execution order
 
-1. Add transport-delay fault conditions to the FCN runtime experiment and calculate timing/coverage KPI.
-2. Add source-content hash and Git state to every run manifest, then build batch report generation.
-3. Repeat the runtime/delay matrix and retain individual valid, fail, and invalid artifacts.
+1. Add source-content hash and Git state to every run manifest, then build batch report generation.
+2. Repeat the runtime/delay matrix and retain individual valid, fail, and invalid artifacts.
+3. Add drop-fault coverage and failure/invalid verdict tests.
 4. Extend the shared delay/drop queue with formal run state and manifest/KPI/verdict reporting.
 
 ## Formal v0.1 experiment matrix
