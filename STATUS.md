@@ -4,7 +4,7 @@ Last updated: 2026-08-28 (Asia/Seoul)
 
 ## Current state
 
-Phase 0–4 implementation is in place in the independent WSL environment. The FCN ONNX model, external two-image replay fixture, and FP32/FP16 TensorRT engines exist only in the local cache. The labeled VOC source download and ground-truth evaluation are in progress; no release benchmark or release result exists yet.
+Phase 0–4 implementation is in place in the independent WSL environment. The FCN ONNX model, external replay fixtures, and FP32/FP16 TensorRT engines exist only in the local cache. A fixed eight-image VOC ground-truth smoke has completed; no release benchmark or release result exists yet.
 
 ## Completed
 
@@ -38,6 +38,8 @@ Phase 0–4 implementation is in place in the independent WSL environment. The F
 - Inspected the Model Zoo FCN archive: it provides ONNX golden outputs, not semantic ground-truth labels. Added tested pixel-accuracy/mIoU calculation with ignored-label support and a `label_path` replay-manifest adapter.
 - Selected external PASCAL VOC 2012 class segmentation for the FCN/VOC 21-class mapping. Its replay fixture builder and published train/validation archive MD5 verification are tested; raw images and labels stay in the local cache and are not committed.
 - Added a label-evaluation adapter: indexed/grayscale label PNGs are resized only with nearest-neighbor sampling and aggregated with runtime label maps for pixel accuracy/mIoU.
+- Downloaded and MD5-verified the external VOC 2012 train/validation archive, then built a fixed eight-image validation replay fixture. ONNX reference measured mIoU 0.595712 and pixel accuracy 0.970537; TensorRT FP16 measured mIoU 0.595641 and pixel accuracy 0.970542 across 2,057,767 non-void pixels. This is a ground-truth integration smoke only, not a full VOC benchmark.
+- Ground-truth evaluation output can write provenance manifests with replay and runtime-artifact SHA-256 plus runtime preflight data.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
 - Unit tests: 37 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
@@ -50,7 +52,7 @@ Phase 0–4 implementation is in place in the independent WSL environment. The F
 
 ## Next task
 
-Download the selected VOC source, build a documented small labeled fixture, and run ONNX/TensorRT ground-truth evaluation over it.
+Define a non-overlapping labeled replay split and run the three-repeat 0/50/100/150 ms delay matrix with the same ground-truth KPI calculation.
 
 ## Historical baseline
 

@@ -5,8 +5,10 @@ from __future__ import annotations
 import argparse
 from collections.abc import Iterable
 from dataclasses import asdict
+import hashlib
 import json
 from pathlib import Path
+from time import time_ns
 from typing import Protocol
 
 import numpy as np
@@ -14,6 +16,7 @@ from PIL import Image
 
 from .contract import SensorFrame
 from .metrics import SegmentationMetrics, segmentation_metrics
+from .preflight import collect
 from .replay import ReplaySource
 from .runtime import Prediction
 
@@ -79,6 +82,7 @@ def main() -> None:
   parser.add_argument("--tensorrt-engine", type=Path)
   parser.add_argument("--profile", default="fcn_resnet50_voc")
   parser.add_argument("--output", required=True, type=Path)
+  parser.add_argument("--manifest", type=Path, help="optional provenance manifest path")
   parser.add_argument("--class-count", type=int, default=21)
   parser.add_argument("--ignore-label", type=int, default=255)
   args = parser.parse_args()
@@ -95,6 +99,25 @@ def main() -> None:
   result = asdict(evaluate_manifest(runtime, args.replay, class_count=args.class_count, ignore_label=args.ignore_label))
   args.output.parent.mkdir(parents=True, exist_ok=True)
   args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+  if args.manifest:
+    artifact = args.onnx_model or args.tensorrt_engine
+    args.manifest.parent.mkdir(parents=True, exist_ok=True)
+    args.manifest.write_text(
+      json.dumps(
+        {
+          "kind": "ground_truth_evaluation/v1",
+          "created_wall_ns": time_ns(),
+          "preflight": collect(),
+          "replay_manifest_sha256": hashlib.sha256(args.replay.read_bytes()).hexdigest(),
+          "runtime": "onnx_reference" if args.onnx_model else "tensorrt",
+          "runtime_artifact_sha256": hashlib.sha256(artifact.read_bytes()).hexdigest(),
+        },
+        indent=2,
+        sort_keys=True,
+      )
+      + "\n",
+      encoding="utf-8",
+    )
   print(json.dumps(result, sort_keys=True))
 
 

@@ -19,3 +19,7 @@ The Model Zoo sample-data archive includes ONNX test inputs and golden outputs, 
 ## Ground-truth source
 
 The external evaluation source is PASCAL VOC 2012 class segmentation. Its `SegmentationClass` PNGs use the 21-class VOC index space expected by this model; index `255` is void and is ignored by the metric. The dataset is downloaded to a local cache and never committed or redistributed by this repository. The train/validation archive is accepted only after it matches the public MD5 `6cd6e144f989b92b3379bac3b3de84fd`. `sdv_adas_validation_lab.voc.build_labeled_fixture` converts explicitly selected image IDs from an external `VOCdevkit/VOC2012` directory into this project's raw-RGB replay manifest with a paired `label_path`.
+
+## Ground-truth smoke result
+
+On 2026-08-28, the fixed VOC validation image IDs `2007_000033`, `2007_000042`, `2007_000061`, `2007_000123`, `2007_000129`, `2007_000175`, `2007_000187`, and `2007_000323` produced 2,057,767 non-void pixels after nearest-neighbor label resizing to 520×520. The ONNX reference measured pixel accuracy 0.970537 and mIoU 0.595712; TensorRT FP16 measured 0.970542 and 0.595641. Per-runtime summary and provenance manifests stay in the local cache with the source data. This is a fixed eight-image integration smoke, not a full VOC benchmark or release KPI.
