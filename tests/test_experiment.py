@@ -15,7 +15,11 @@ def test_experiment_manifest_shape_without_runtime(monkeypatch, tmp_path) -> Non
   engine = tmp_path / "engine"
   engine.write_bytes(b"engine")
   monkeypatch.setattr("sdv_adas_validation_lab.experiment.TensorRtRuntime", lambda *args, **kwargs: object())
-  monkeypatch.setattr("sdv_adas_validation_lab.experiment.run_repeated", lambda *args, **kwargs: [{}])
-  manifest = run_delay_experiment(ReplaySource.synthetic(1), engine, tmp_path / "output", delays_ms=[0, 50], repeats=1, warmups=0, profile="unit")
+  monkeypatch.setattr("sdv_adas_validation_lab.experiment.run_once", lambda *args, **kwargs: {})
+  manifest = run_delay_experiment(
+    ReplaySource.synthetic(1), engine, tmp_path / "output", delays_ms=[0, 50], repeats=1, warmups=0, profile="unit", order_seed=7
+  )
   assert [item["delay_ms"] for item in manifest["conditions"]] == [0, 50]
-  assert json.loads((tmp_path / "output" / "experiment_manifest.json").read_text())["repeats"] == 1
+  stored = json.loads((tmp_path / "output" / "experiment_manifest.json").read_text())
+  assert stored["repeats"] == 1
+  assert sorted(stored["block_orders_ms"][0]) == [0, 50]
