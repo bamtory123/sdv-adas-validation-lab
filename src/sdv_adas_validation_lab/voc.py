@@ -96,6 +96,7 @@ def main() -> None:
   parser.add_argument("--sample-count", type=int)
   parser.add_argument("--seed", type=int, default=20260828)
   parser.add_argument("--exclude-image-id", action="append", default=[])
+  parser.add_argument("--exclude-source", action="append", type=Path, default=[])
   args = parser.parse_args()
   if args.image_id and (args.split or args.sample_count):
     parser.error("--image-id cannot be combined with split sampling")
@@ -103,8 +104,18 @@ def main() -> None:
     image_ids = args.image_id
     selection = {"method": "explicit_ids"}
   elif args.split and args.sample_count:
-    image_ids = select_split_image_ids(args.voc_root, args.split, args.sample_count, seed=args.seed, exclude=set(args.exclude_image_id))
-    selection = {"method": "seeded_split", "split": args.split, "count": args.sample_count, "seed": args.seed, "exclude_image_ids": args.exclude_image_id}
+    excluded = set(args.exclude_image_id)
+    for source_path in args.exclude_source:
+      excluded.update(json.loads(source_path.read_text(encoding="utf-8"))["image_ids"])
+    image_ids = select_split_image_ids(args.voc_root, args.split, args.sample_count, seed=args.seed, exclude=excluded)
+    selection = {
+      "method": "seeded_split",
+      "split": args.split,
+      "count": args.sample_count,
+      "seed": args.seed,
+      "exclude_image_ids": sorted(excluded),
+      "exclude_sources": [str(path) for path in args.exclude_source],
+    }
   else:
     parser.error("provide --image-id or both --split and --sample-count")
   print(build_labeled_fixture(args.voc_root, image_ids, args.output, selection=selection))
