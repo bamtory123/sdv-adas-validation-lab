@@ -1,0 +1,11 @@
+{
+  "validity": "valid",
+  "outcome": "pass",
+  "coverage": 1.0,
+  "transport_delay": {
+    "median_ms": 50.82
+  },
+  "inference_latency": {
+    "median_ms": 22.0
+  }
+}

@@ -13,3 +13,4 @@ jobs:
       - run: uv sync --group dev
       - run: uv run pytest -q
       - run: uv run python -m sdv_adas_validation_lab.report --runs tests --output /tmp/report.md
+      - run: uv run python -m sdv_adas_validation_lab.evidence --evaluation redacted-sample samples/evidence/ground-truth.json --runs samples/evidence/replay --output /tmp/evidence.md

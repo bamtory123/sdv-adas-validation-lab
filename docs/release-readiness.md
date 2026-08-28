@@ -18,7 +18,7 @@ This evidence supports a bounded offline camera-replay portfolio demonstration. 
 ## Before a public tag
 
 1. Decide whether the bounded fixture evidence is the intended `v0.1.0-portfolio` scope, or run a declared larger split first.
-2. If publishing, attach only a redacted sample report and reproduction commands—never raw VOC data, ONNX models, TensorRT engines, or engine-bound manifests.
+2. If publishing, attach only the CI-verified [redacted sample input](../samples/evidence/README.md), a generated Markdown report, and reproduction commands—never raw VOC data, ONNX models, TensorRT engines, or engine-bound manifests.
 3. Confirm README and release notes retain the scope boundary above.
 
 No Git tag or public GitHub release has been created by this document.
