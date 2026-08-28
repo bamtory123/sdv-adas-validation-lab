@@ -43,6 +43,7 @@ Phase 0–4 implementation is in place in the independent WSL environment. The F
 - Corrected the delay experiment runner so delay conditions are shuffled within each measured repeat block and the exact seed/order is recorded. The prior grouped-order artifact is retained but excluded from interpretation because it confounded elapsed runtime effects with the final condition.
 - Re-ran the warm-up-excluded VOC eight-image TensorRT FP16 matrix: 0/50/100/150 ms, three measured runs per condition, all `valid/pass` with coverage 1.0. Actual median delay ranges were 0.0055–0.0058, 50.43–50.81, 100.47–101.22, and 150.47–150.94 ms. This is repeatability evidence for the micro-fixture only.
 - Discovered that the original harness synchronously invoked runtime inference while publishing ready frames, which inflated later transport timing on longer fixtures. Runtime inference is now downstream of transport; a slow-runtime unit test verifies it cannot stall producer timing. Earlier 50-image delay artifact is retained but excluded from interpretation and will be re-run.
+- Built a deterministic, non-overlapping 50-image VOC validation fixture (seed `20260828`, 12,671,063 non-void pixels). ONNX measured mIoU 0.643037 / pixel accuracy 0.921312; TensorRT FP16 measured 0.643125 / 0.921344. The corrected warm-up-excluded 12-run FP16 delay matrix is all `valid/pass`, coverage 1.0, with actual median delay ranges 0.0033–0.0039, 50.36–50.94, 100.06–100.81, and 150.47–150.83 ms for the four target conditions.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
 - Unit tests: 39 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
@@ -55,7 +56,7 @@ Phase 0–4 implementation is in place in the independent WSL environment. The F
 
 ## Next task
 
-Re-run the larger deterministic 50-image replay matrix with the corrected non-blocking transport path, then define a larger sample-size policy before considering release interpretation.
+Define a larger sample-size policy and hold-out split before considering release interpretation; keep the current 50-image result explicitly as repeatability evidence, not a release benchmark.
 
 ## Historical baseline
 
