@@ -4,7 +4,7 @@ Last updated: 2026-08-28 (Asia/Seoul)
 
 ## Current state
 
-Phases 0–6 are complete for bounded offline evidence in the independent WSL environment. The FCN ONNX model, external replay fixtures, and FP32/FP16 TensorRT engines exist only in the local cache. A public release is prepared but not published; no full-dataset benchmark or real-world validation result exists.
+Phases 0–7 are complete for the bounded offline portfolio release. The FCN ONNX model, external replay fixtures, and FP32/FP16 TensorRT engines exist only in the local cache. `v0.1.0-portfolio` is published; no full-dataset benchmark or real-world validation result exists.
 
 ## Completed
 
@@ -48,7 +48,7 @@ Phases 0–6 are complete for bounded offline evidence in the independent WSL en
 - Added and executed a CPU-only evidence generator that combines named ground-truth JSON summaries and replay-run artifacts into one Markdown report. The generated cache artifact includes both 50-image/hold-out metrics and all 12 corrected delay runs.
 - Completed the bounded 50-image runtime baseline: TensorRT FP32 ground-truth mIoU 0.642985 / pixel accuracy 0.921310. Three warm-up-excluded zero-delay runs per runtime were all `valid/pass`, coverage 1.0; local median inference ranges were ONNX CPU reference 481.64–490.31ms, TensorRT FP32 43.24–46.71ms, and TensorRT FP16 21.19–22.06ms. These are local replay measurements, not real-time guarantees.
 - Added a release-safe redacted evidence sample and CI evidence-generation check. It includes only compact result summaries; no raw data, models, engines, local paths, or environment manifests are tracked.
-- Added a `v0.1.0-portfolio` draft release note with reproduction boundaries. It is not a published GitHub release or tag.
+- Published `v0.1.0-portfolio` with the redacted release bundle after CI success. The public asset contains documentation, redacted evidence, and a checksum manifest only.
 - Added and locally generated an unpublished release-bundle artifact containing only redacted documents, a redacted evidence report, and SHA-256 manifest. Bundle generation and its content audit run in CI.
 - Added optional ZIP packaging for the redacted bundle and verified its contents: documentation, redacted evidence, and manifest only. The ZIP candidate remains in the local cache and is not a GitHub release asset.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
@@ -58,11 +58,11 @@ Phases 0–6 are complete for bounded offline evidence in the independent WSL en
 ## Not yet implemented
 
 - A declared larger/full VOC split, if the bounded evidence is not the intended public-release scope.
-- Public Git tag and GitHub release creation, after release-scope approval.
+- A declared larger/full VOC split, if broader-than-bounded evidence is required for a future release.
 
 ## Next task
 
-Publish the prepared bounded portfolio release with only the redacted bundle; keep the full declared VOC split as a post-v0.1 scope decision.
+Plan the next scoped milestone (for example, a declared larger VOC split or the separate v0.2 closed-loop adapter); retain the v0.1 boundary.
 
 ## Historical baseline
 

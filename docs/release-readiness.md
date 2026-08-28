@@ -15,16 +15,14 @@ This evidence supports a bounded offline camera-replay portfolio demonstration. 
 - real-time guarantees; or
 - Hyundai/NVIDIA production-system equivalence.
 
-## Before a public tag
+## Published release
 
-1. Decide whether the bounded fixture evidence is the intended `v0.1.0-portfolio` scope, or run a declared larger split first.
-2. If publishing, attach only the CI-verified [redacted sample input](../samples/evidence/README.md), a generated Markdown report, and reproduction commands—never raw VOC data, ONNX models, TensorRT engines, or engine-bound manifests.
-3. Confirm README and release notes retain the scope boundary above.
+`v0.1.0-portfolio` is published as a bounded offline replay portfolio release. Its asset is the CI-verified redacted bundle; raw VOC data, ONNX models, TensorRT engines, and engine-bound manifests remain excluded.
 
 CI also runs a release-content audit that rejects tracked `.onnx`, `.engine`, raw RGB, JPEG, and PNG artifacts.
 
-The repository contains [release notes](release-notes-v0.1.0-portfolio.md) for publication review.
+The repository contains the published [release notes](release-notes-v0.1.0-portfolio.md).
 
-`python -m sdv_adas_validation_lab.release_bundle --output <directory> --archive <zip-path>` builds an unpublished, redacted release bundle, audits its content, writes a manifest, and optionally creates the ZIP candidate for a future release asset.
+`python -m sdv_adas_validation_lab.release_bundle --output <directory> --archive <zip-path>` builds a redacted release bundle, audits its content, writes a manifest, and optionally creates a ZIP release asset.
 
-No Git tag or public GitHub release has been created by this document.
+The full declared VOC split remains a post-v0.1 scope decision.
