@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import argparse
 from collections.abc import Iterable
+from dataclasses import asdict
 import json
 from pathlib import Path
 from typing import Protocol
@@ -68,6 +70,36 @@ def evaluate_manifest(
     class_count=class_count,
     ignore_label=ignore_label,
   )
+
+
+def main() -> None:
+  parser = argparse.ArgumentParser(description="Evaluate a labeled replay against one segmentation runtime.")
+  parser.add_argument("--replay", required=True, type=Path)
+  parser.add_argument("--onnx-model", type=Path)
+  parser.add_argument("--tensorrt-engine", type=Path)
+  parser.add_argument("--profile", default="fcn_resnet50_voc")
+  parser.add_argument("--output", required=True, type=Path)
+  parser.add_argument("--class-count", type=int, default=21)
+  parser.add_argument("--ignore-label", type=int, default=255)
+  args = parser.parse_args()
+  if bool(args.onnx_model) == bool(args.tensorrt_engine):
+    parser.error("provide exactly one of --onnx-model or --tensorrt-engine")
+  if args.onnx_model:
+    from .runtime import OnnxReferenceRuntime
+
+    runtime: RuntimeAdapter = OnnxReferenceRuntime(args.onnx_model, profile=args.profile)
+  else:
+    from .tensorrt_runtime import TensorRtRuntime
+
+    runtime = TensorRtRuntime(args.tensorrt_engine, profile=args.profile)
+  result = asdict(evaluate_manifest(runtime, args.replay, class_count=args.class_count, ignore_label=args.ignore_label))
+  args.output.parent.mkdir(parents=True, exist_ok=True)
+  args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+  print(json.dumps(result, sort_keys=True))
+
+
+if __name__ == "__main__":
+  main()
 
 
 def evaluate(
