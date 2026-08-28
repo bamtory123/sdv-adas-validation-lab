@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import argparse
-import json
 import hashlib
+import json
 from pathlib import Path
+import random
 
 from PIL import Image
 
@@ -20,6 +21,21 @@ def verify_trainval_archive(path: Path) -> None:
   digest = hashlib.md5(path.read_bytes()).hexdigest()
   if digest != VOC2012_TRAINVAL_MD5:
     raise ValueError(f"VOC 2012 trainval MD5 mismatch: {digest}")
+
+
+def select_split_image_ids(
+  voc_root: Path, split: str, count: int, *, seed: int, exclude: set[str] | None = None
+) -> list[str]:
+  """Select a deterministic, non-overlapping subset from a VOC segmentation split."""
+  if count <= 0:
+    raise ValueError("count must be positive")
+  ids = (voc_root / "ImageSets" / "Segmentation" / f"{split}.txt").read_text(encoding="utf-8").splitlines()
+  eligible = [image_id for image_id in ids if image_id not in (exclude or set())]
+  if count > len(eligible):
+    raise ValueError(f"requested {count} images but only {len(eligible)} are eligible")
+  generator = random.Random(seed)
+  generator.shuffle(eligible)
+  return eligible[:count]
 
 
 def build_labeled_fixture(voc_root: Path, image_ids: list[str], output_dir: Path, *, period_ns: int = 50_000_000) -> Path:
@@ -69,9 +85,21 @@ def main() -> None:
   parser = argparse.ArgumentParser(description="Build a labeled replay from an external VOC 2012 directory.")
   parser.add_argument("--voc-root", required=True, type=Path)
   parser.add_argument("--output", required=True, type=Path)
-  parser.add_argument("--image-id", action="append", required=True)
+  parser.add_argument("--image-id", action="append")
+  parser.add_argument("--split", help="VOC segmentation split used with --sample-count")
+  parser.add_argument("--sample-count", type=int)
+  parser.add_argument("--seed", type=int, default=20260828)
+  parser.add_argument("--exclude-image-id", action="append", default=[])
   args = parser.parse_args()
-  print(build_labeled_fixture(args.voc_root, args.image_id, args.output))
+  if args.image_id and (args.split or args.sample_count):
+    parser.error("--image-id cannot be combined with split sampling")
+  if args.image_id:
+    image_ids = args.image_id
+  elif args.split and args.sample_count:
+    image_ids = select_split_image_ids(args.voc_root, args.split, args.sample_count, seed=args.seed, exclude=set(args.exclude_image_id))
+  else:
+    parser.error("provide --image-id or both --split and --sample-count")
+  print(build_labeled_fixture(args.voc_root, image_ids, args.output))
 
 
 if __name__ == "__main__":

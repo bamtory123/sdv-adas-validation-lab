@@ -5,7 +5,13 @@ from PIL import Image
 
 import pytest
 
-from sdv_adas_validation_lab.voc import VOC_CLASS_COUNT, VOC_IGNORE_LABEL, build_labeled_fixture, verify_trainval_archive
+from sdv_adas_validation_lab.voc import (
+  VOC_CLASS_COUNT,
+  VOC_IGNORE_LABEL,
+  build_labeled_fixture,
+  select_split_image_ids,
+  verify_trainval_archive,
+)
 
 
 def test_build_labeled_fixture_converts_voc_pair(tmp_path) -> None:
@@ -29,3 +35,12 @@ def test_archive_verification_rejects_unknown_content(tmp_path) -> None:
   archive.write_bytes(b"not a VOC archive")
   with pytest.raises(ValueError, match="MD5 mismatch"):
     verify_trainval_archive(archive)
+
+
+def test_split_selection_is_seeded_and_excludes_existing_ids(tmp_path) -> None:
+  split = tmp_path / "VOC2012" / "ImageSets" / "Segmentation"
+  split.mkdir(parents=True)
+  (split / "val.txt").write_text("a\nb\nc\nd\n", encoding="utf-8")
+  selected = select_split_image_ids(tmp_path / "VOC2012", "val", 2, seed=7, exclude={"a"})
+  assert selected == select_split_image_ids(tmp_path / "VOC2012", "val", 2, seed=7, exclude={"a"})
+  assert "a" not in selected
