@@ -25,6 +25,6 @@ CI also runs a release-content audit that rejects tracked `.onnx`, `.engine`, ra
 
 The repository contains a [draft release note](release-notes-v0.1.0-portfolio.md) for this review; it is not a published GitHub release.
 
-`python -m sdv_adas_validation_lab.release_bundle --output <directory>` builds an unpublished, redacted release bundle and audits its content before writing a manifest.
+`python -m sdv_adas_validation_lab.release_bundle --output <directory> --archive <zip-path>` builds an unpublished, redacted release bundle, audits its content, writes a manifest, and optionally creates the ZIP candidate for a future release asset.
 
 No Git tag or public GitHub release has been created by this document.

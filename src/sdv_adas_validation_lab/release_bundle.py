@@ -43,12 +43,21 @@ def build(repository_root: Path, output_dir: Path) -> dict[str, object]:
   return manifest
 
 
+def archive_bundle(output_dir: Path, archive_path: Path) -> Path:
+  archive_path.parent.mkdir(parents=True, exist_ok=True)
+  return Path(shutil.make_archive(str(archive_path.with_suffix("")), "zip", root_dir=output_dir))
+
+
 def main() -> None:
   parser = argparse.ArgumentParser()
   parser.add_argument("--repository-root", type=Path, default=Path("."))
   parser.add_argument("--output", required=True, type=Path)
+  parser.add_argument("--archive", type=Path, help="optional ZIP path for the completed redacted bundle")
   args = parser.parse_args()
-  print(json.dumps(build(args.repository_root, args.output), sort_keys=True))
+  manifest = build(args.repository_root, args.output)
+  if args.archive:
+    manifest["archive"] = str(archive_bundle(args.output, args.archive))
+  print(json.dumps(manifest, sort_keys=True))
 
 
 if __name__ == "__main__":

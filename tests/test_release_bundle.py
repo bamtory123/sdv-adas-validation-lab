@@ -1,6 +1,6 @@
 import json
 
-from sdv_adas_validation_lab.release_bundle import FILES, build
+from sdv_adas_validation_lab.release_bundle import FILES, archive_bundle, build
 
 
 def test_release_bundle_contains_only_redacted_documents(tmp_path) -> None:
@@ -18,3 +18,4 @@ def test_release_bundle_contains_only_redacted_documents(tmp_path) -> None:
   assert manifest["kind"] == "portfolio_release_bundle/v1"
   assert (tmp_path / "bundle" / "evidence-sample.md").is_file()
   assert (tmp_path / "bundle" / "manifest.json").is_file()
+  assert archive_bundle(tmp_path / "bundle", tmp_path / "portfolio.zip").is_file()

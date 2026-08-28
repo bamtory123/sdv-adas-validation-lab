@@ -50,6 +50,7 @@ Phases 0–6 are complete for bounded offline evidence in the independent WSL en
 - Added a release-safe redacted evidence sample and CI evidence-generation check. It includes only compact result summaries; no raw data, models, engines, local paths, or environment manifests are tracked.
 - Added a `v0.1.0-portfolio` draft release note with reproduction boundaries. It is not a published GitHub release or tag.
 - Added and locally generated an unpublished release-bundle artifact containing only redacted documents, a redacted evidence report, and SHA-256 manifest. Bundle generation and its content audit run in CI.
+- Added optional ZIP packaging for the redacted bundle and verified its contents: documentation, redacted evidence, and manifest only. The ZIP candidate remains in the local cache and is not a GitHub release asset.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
 - Unit tests: 43 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
