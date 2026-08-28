@@ -28,6 +28,7 @@ def test_build_labeled_fixture_converts_voc_pair(tmp_path) -> None:
   assert (tmp_path / "fixture" / record["image_path"]).read_bytes()
   assert VOC_CLASS_COUNT == 21
   assert VOC_IGNORE_LABEL == 255
+  assert json.loads((tmp_path / "fixture" / "source.json").read_text())["selection"] is None
 
 
 def test_archive_verification_rejects_unknown_content(tmp_path) -> None:

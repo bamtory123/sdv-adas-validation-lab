@@ -1,0 +1,21 @@
+version: evaluation-policy/v1
+dataset: PASCAL VOC 2012 SegmentationClass
+source_archive_md5: 6cd6e144f989b92b3379bac3b3de84fd
+development_smoke:
+  method: explicit_ids
+  count: 8
+repeatability_fixture:
+  split: val
+  method: seeded_split
+  seed: 20260828
+  count: 50
+  excludes: development_smoke
+holdout_policy:
+  split: val
+  method: seeded_split
+  seed: 20260829
+  count: 200
+  excludes: [development_smoke, repeatability_fixture]
+limitations:
+  - No tuning decision may use holdout metrics.
+  - The 50-image fixture is repeatability evidence, not a release benchmark.

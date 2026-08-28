@@ -38,7 +38,9 @@ def select_split_image_ids(
   return eligible[:count]
 
 
-def build_labeled_fixture(voc_root: Path, image_ids: list[str], output_dir: Path, *, period_ns: int = 50_000_000) -> Path:
+def build_labeled_fixture(
+  voc_root: Path, image_ids: list[str], output_dir: Path, *, period_ns: int = 50_000_000, selection: dict[str, object] | None = None
+) -> Path:
   """Convert selected VOC image/label pairs into the repository replay contract.
 
   `voc_root` is the external `VOCdevkit/VOC2012` directory. The fixture contains
@@ -75,7 +77,11 @@ def build_labeled_fixture(voc_root: Path, image_ids: list[str], output_dir: Path
   manifest_path = output_dir / "frames.jsonl"
   manifest_path.write_text("".join(json.dumps(record, sort_keys=True) + "\n" for record in records), encoding="utf-8")
   (output_dir / "source.json").write_text(
-    json.dumps({"dataset": "PASCAL VOC 2012", "class_count": VOC_CLASS_COUNT, "ignore_label": VOC_IGNORE_LABEL, "image_ids": image_ids}, indent=2) + "\n",
+    json.dumps(
+      {"dataset": "PASCAL VOC 2012", "class_count": VOC_CLASS_COUNT, "ignore_label": VOC_IGNORE_LABEL, "image_ids": image_ids, "selection": selection},
+      indent=2,
+    )
+    + "\n",
     encoding="utf-8",
   )
   return manifest_path
@@ -95,11 +101,13 @@ def main() -> None:
     parser.error("--image-id cannot be combined with split sampling")
   if args.image_id:
     image_ids = args.image_id
+    selection = {"method": "explicit_ids"}
   elif args.split and args.sample_count:
     image_ids = select_split_image_ids(args.voc_root, args.split, args.sample_count, seed=args.seed, exclude=set(args.exclude_image_id))
+    selection = {"method": "seeded_split", "split": args.split, "count": args.sample_count, "seed": args.seed, "exclude_image_ids": args.exclude_image_id}
   else:
     parser.error("provide --image-id or both --split and --sample-count")
-  print(build_labeled_fixture(args.voc_root, image_ids, args.output))
+  print(build_labeled_fixture(args.voc_root, image_ids, args.output, selection=selection))
 
 
 if __name__ == "__main__":
