@@ -4,7 +4,7 @@ Last updated: 2026-08-28 (Asia/Seoul)
 
 ## Current state
 
-Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementation. The repository and independent WSL environment exist. No model, real replay dataset, TensorRT engine, formal benchmark, or release result exists yet.
+Phase 0–4 implementation is in place in the independent WSL environment. The FCN ONNX model, external two-image replay fixture, and FP32/FP16 TensorRT engines exist only in the local cache. The labeled VOC source download and ground-truth evaluation are in progress; no release benchmark or release result exists yet.
 
 ## Completed
 
@@ -40,13 +40,13 @@ Phase 0 and Phase 1 are underway; Phase 4 has a tested minimal queue implementat
 - Added a label-evaluation adapter: indexed/grayscale label PNGs are resized only with nearest-neighbor sampling and aggregated with runtime label maps for pixel accuracy/mIoU.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
-- Unit tests: 33 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
+- Unit tests: 36 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
 
 ## Not yet implemented
 
-- Replay source content hashing, stream coverage checks, and the dataset/model decision gate.
-- A redistribution-compatible segmentation model, model-specific output decoding, TensorRT FP16, and FP32/FP16 accuracy comparison.
-- Fault queue, run state machine, manifest, KPI, verdict, report, batch runner, CI, and formal experiments.
+- Ground-truth accuracy evaluation on an actual labeled source, including documented input checksums and the selected image IDs.
+- Formal dataset selection/split policy and three-repeat baseline/fault study over a labeled replay set large enough for release interpretation.
+- Release candidate evidence pack: per-run plots, sample artifact bundle, final report, and explicit limitations review.
 
 ## Next task
 
