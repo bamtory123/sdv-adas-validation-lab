@@ -25,6 +25,8 @@ ReplaySource -> SensorFrame -> StreamValidator -> FaultQueue -> RuntimeAdapter
 
 The parity comparator uses the same `ReplaySource` frames for both runtimes and aggregates primary segmentation label agreement. It is a runtime-consistency KPI; ground-truth accuracy requires labeled data and is tracked separately. A labeled replay manifest adds one `label_path` per frame; labels must be indexed/grayscale and are resized with nearest-neighbor sampling to the runtime's output shape before the metric is calculated.
 
+Delay experiments execute one warm-up per condition, then shuffle all delay conditions independently within each measured repeat block using a recorded deterministic seed. The aggregate manifest records the exact block order, so elapsed GPU/WSL effects are not systematically assigned to one delay condition.
+
 The replay harness records actual publish delay rather than only the requested fault delay, plus inference latency and published/captured coverage. This isolates transport scheduling from runtime execution time.
 
 Configured frame drops are expected fault events and are excluded from the coverage denominator; overflow and unaccounted loss remain invalid conditions.

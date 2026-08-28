@@ -40,6 +40,8 @@ Phase 0–4 implementation is in place in the independent WSL environment. The F
 - Added a label-evaluation adapter: indexed/grayscale label PNGs are resized only with nearest-neighbor sampling and aggregated with runtime label maps for pixel accuracy/mIoU.
 - Downloaded and MD5-verified the external VOC 2012 train/validation archive, then built a fixed eight-image validation replay fixture. ONNX reference measured mIoU 0.595712 and pixel accuracy 0.970537; TensorRT FP16 measured mIoU 0.595641 and pixel accuracy 0.970542 across 2,057,767 non-void pixels. This is a ground-truth integration smoke only, not a full VOC benchmark.
 - Ground-truth evaluation output can write provenance manifests with replay and runtime-artifact SHA-256 plus runtime preflight data.
+- Corrected the delay experiment runner so delay conditions are shuffled within each measured repeat block and the exact seed/order is recorded. The prior grouped-order artifact is retained but excluded from interpretation because it confounded elapsed runtime effects with the final condition.
+- Re-ran the warm-up-excluded VOC eight-image TensorRT FP16 matrix: 0/50/100/150 ms, three measured runs per condition, all `valid/pass` with coverage 1.0. Actual median delay ranges were 0.0055–0.0058, 50.43–50.81, 100.47–101.22, and 150.47–150.94 ms. This is repeatability evidence for the micro-fixture only.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
 - Unit tests: 37 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
@@ -52,7 +54,7 @@ Phase 0–4 implementation is in place in the independent WSL environment. The F
 
 ## Next task
 
-Define a non-overlapping labeled replay split and run the three-repeat 0/50/100/150 ms delay matrix with the same ground-truth KPI calculation.
+Define a larger non-overlapping labeled replay split and its sample-size policy, then repeat the same three-run delay study before considering any release interpretation.
 
 ## Historical baseline
 

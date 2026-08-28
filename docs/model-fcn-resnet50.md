@@ -23,3 +23,5 @@ The external evaluation source is PASCAL VOC 2012 class segmentation. Its `Segme
 ## Ground-truth smoke result
 
 On 2026-08-28, the fixed VOC validation image IDs `2007_000033`, `2007_000042`, `2007_000061`, `2007_000123`, `2007_000129`, `2007_000175`, `2007_000187`, and `2007_000323` produced 2,057,767 non-void pixels after nearest-neighbor label resizing to 520×520. The ONNX reference measured pixel accuracy 0.970537 and mIoU 0.595712; TensorRT FP16 measured 0.970542 and 0.595641. Per-runtime summary and provenance manifests stay in the local cache with the source data. This is a fixed eight-image integration smoke, not a full VOC benchmark or release KPI.
+
+The same eight-image fixture completed a warm-up-excluded TensorRT FP16 delay matrix with three measured runs per 0/50/100/150ms condition. All twelve runs were `valid/pass` with coverage 1.0. Their actual median transport-delay ranges were 0.0055–0.0058ms, 50.43–50.81ms, 100.47–101.22ms, and 150.47–150.94ms respectively. The matrix uses seed `20260828` and records the per-block order; it validates transport-delay repeatability, not full-dataset model accuracy or a release KPI.
