@@ -18,11 +18,13 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 | 5 | Manifest, KPI, verdict, batch runner, report | hand-calculated KPI and report fixture tests | Completed |
 | 6 | Formal experiments and evidence | 3 retained runs per runtime/fault condition | Completed: bounded fixture evidence |
 | 7 | Portfolio release | CI, documentation, sample results, tagged public release | Completed: [`v0.1.0-portfolio`](https://github.com/bamtory123/sdv-adas-validation-lab/releases/tag/v0.1.0-portfolio) |
+| 8 | Full VOC reference evaluation | one fixed full validation fixture, ONNX/FP32/FP16 ground-truth summaries and provenance manifests | Completed: external-cache evidence only |
 
 ## Immediate execution order
 
 1. Preserve the v0.1 evidence boundary: the public release is bounded replay evidence, not a vehicle, HIL, DRIVE AGX, or closed-loop claim.
-2. Treat a full declared VOC split, additional fault campaigns, and any closed-loop simulator work as separately scoped post-v0.1 milestones.
+2. Treat the completed full-VOC accuracy check as external-cache v0.2 reference evidence; it does not change the tagged v0.1 release or establish driving performance.
+3. Scope additional fault campaigns and any closed-loop simulator work as separate post-v0.1 milestones.
 
 ## Formal v0.1 experiment matrix
 

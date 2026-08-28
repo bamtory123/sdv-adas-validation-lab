@@ -4,7 +4,7 @@ Last updated: 2026-08-28 (Asia/Seoul)
 
 ## Current state
 
-Phases 0–7 are complete for the bounded offline portfolio release. The FCN ONNX model, external replay fixtures, and FP32/FP16 TensorRT engines exist only in the local cache. `v0.1.0-portfolio` is published; no full-dataset benchmark or real-world validation result exists.
+Phases 0–8 are complete for the bounded offline portfolio release plus one full-VOC reference evaluation. The FCN ONNX model, external replay fixtures, and FP32/FP16 TensorRT engines exist only in the local cache. `v0.1.0-portfolio` is published; no real-world or closed-loop validation result exists.
 
 ## Completed
 
@@ -54,15 +54,16 @@ Phases 0–7 are complete for the bounded offline portfolio release. The FCN ONN
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
 - Unit tests: 43 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
+- Evaluated the complete VOC 2012 segmentation validation split once (1,449 images, deterministic order seed `20260830`, 370,187,947 non-void pixels). ONNX reference measured mIoU 0.696969 / pixel accuracy 0.930828; TensorRT FP32 measured mIoU 0.696991 / pixel accuracy 0.930835; TensorRT FP16 measured mIoU 0.696906 / pixel accuracy 0.930831. Artifacts and provenance manifests remain in the external cache; this does not modify the published v0.1 scope.
 
 ## Not yet implemented
 
-- A declared larger/full VOC split, if the bounded evidence is not the intended public-release scope.
-- A declared larger/full VOC split, if broader-than-bounded evidence is required for a future release.
+- A formal full-VOC transport-delay campaign; it would be a separately declared execution-cost and interpretation scope.
+- Any closed-loop simulator adapter or driving-behavior evaluation.
 
 ## Next task
 
-Plan the next scoped milestone (for example, a declared larger VOC split or the separate v0.2 closed-loop adapter); retain the v0.1 boundary.
+Generate a CPU-only combined evidence report that includes the full-VOC reference, then scope the next fault campaign or separate v0.2 closed-loop adapter while retaining the v0.1 boundary.
 
 ## Historical baseline
 

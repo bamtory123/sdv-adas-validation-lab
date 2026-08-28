@@ -12,6 +12,7 @@ Reproducible, offline validation of a camera frame contract, replay pipeline, tr
 - Environment preflight recorded in run manifests
 - JSONL/synthetic replay and repeatable non-blocking delay/drop fault smoke harness
 - CPU-only Markdown evidence generation from ground-truth and replay artifacts
+- Full PASCAL VOC 2012 validation accuracy reference for ONNX, TensorRT FP32, and TensorRT FP16, retained only in the local external-data cache
 
 Openpilot/MetaDrive work remains a separate `v0.2` closed-loop adapter baseline; it is not copied into this repository.
 
