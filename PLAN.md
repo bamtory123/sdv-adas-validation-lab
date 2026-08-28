@@ -17,12 +17,12 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 | 4 | Non-blocking delay/drop faults | fake-clock FIFO/deadline/overflow tests | Completed |
 | 5 | Manifest, KPI, verdict, batch runner, report | hand-calculated KPI and report fixture tests | Completed |
 | 6 | Formal experiments and evidence | 3 retained runs per runtime/fault condition | Completed: bounded fixture evidence |
-| 7 | Portfolio release | CI, documentation, sample results, tagged release | Pending |
+| 7 | Portfolio release | CI, documentation, sample results, tagged public release | Completed: [`v0.1.0-portfolio`](https://github.com/bamtory123/sdv-adas-validation-lab/releases/tag/v0.1.0-portfolio) |
 
 ## Immediate execution order
 
-1. Review the complete bounded evidence pack and decide whether a full declared VOC split is warranted; retain current results as bounded replay evidence only.
-2. Generate final sample-result release artifacts only after that scope decision.
+1. Preserve the v0.1 evidence boundary: the public release is bounded replay evidence, not a vehicle, HIL, DRIVE AGX, or closed-loop claim.
+2. Treat a full declared VOC split, additional fault campaigns, and any closed-loop simulator work as separately scoped post-v0.1 milestones.
 
 ## Formal v0.1 experiment matrix
 
