@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import hashlib
 from pathlib import Path
@@ -62,3 +63,16 @@ def build_labeled_fixture(voc_root: Path, image_ids: list[str], output_dir: Path
     encoding="utf-8",
   )
   return manifest_path
+
+
+def main() -> None:
+  parser = argparse.ArgumentParser(description="Build a labeled replay from an external VOC 2012 directory.")
+  parser.add_argument("--voc-root", required=True, type=Path)
+  parser.add_argument("--output", required=True, type=Path)
+  parser.add_argument("--image-id", action="append", required=True)
+  args = parser.parse_args()
+  print(build_labeled_fixture(args.voc_root, args.image_id, args.output))
+
+
+if __name__ == "__main__":
+  main()
