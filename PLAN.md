@@ -21,7 +21,7 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 
 ## Immediate execution order
 
-1. Build the configured 200-image held-out fixture and evaluate it once without using its metrics for tuning; retain the current 50-image result as repeatability evidence only.
+1. Review the evidence pack and decide whether to expand to a full declared VOC split; retain all current results as bounded replay evidence only.
 2. Connect ground-truth accuracy KPI, then repeat the runtime/delay matrix against that coverage and retain individual valid, fail, and invalid artifacts.
 3. Generate the final Markdown report and sample-result release artifacts.
 4. Extend the shared delay/drop queue with formal run state and manifest/KPI/verdict reporting.
