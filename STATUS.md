@@ -4,7 +4,7 @@ Last updated: 2026-08-28 (Asia/Seoul)
 
 ## Current state
 
-Phase 0–4 implementation is in place in the independent WSL environment. The FCN ONNX model, external replay fixtures, and FP32/FP16 TensorRT engines exist only in the local cache. A fixed eight-image VOC ground-truth smoke has completed; no release benchmark or release result exists yet.
+Phases 0–6 are complete for bounded offline evidence in the independent WSL environment. The FCN ONNX model, external replay fixtures, and FP32/FP16 TensorRT engines exist only in the local cache. A public release is prepared but not published; no full-dataset benchmark or real-world validation result exists.
 
 ## Completed
 
@@ -55,9 +55,8 @@ Phase 0–4 implementation is in place in the independent WSL environment. The F
 
 ## Not yet implemented
 
-- Ground-truth accuracy evaluation on an actual labeled source, including documented input checksums and the selected image IDs.
-- Formal dataset selection/split policy and three-repeat baseline/fault study over a labeled replay set large enough for release interpretation.
-- Release candidate evidence pack: per-run plots, sample artifact bundle, final report, and explicit limitations review.
+- A declared larger/full VOC split, if the bounded evidence is not the intended public-release scope.
+- Public Git tag and GitHub release creation, after release-scope approval.
 
 ## Next task
 
