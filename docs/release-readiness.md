@@ -23,7 +23,7 @@ This evidence supports a bounded offline camera-replay portfolio demonstration. 
 
 CI also runs a release-content audit that rejects tracked `.onnx`, `.engine`, raw RGB, JPEG, and PNG artifacts.
 
-The repository contains a [draft release note](release-notes-v0.1.0-portfolio.md) for this review; it is not a published GitHub release.
+The repository contains [release notes](release-notes-v0.1.0-portfolio.md) for publication review.
 
 `python -m sdv_adas_validation_lab.release_bundle --output <directory> --archive <zip-path>` builds an unpublished, redacted release bundle, audits its content, writes a manifest, and optionally creates the ZIP candidate for a future release asset.
 

@@ -1,4 +1,4 @@
-# v0.1.0-portfolio — draft release notes
+# v0.1.0-portfolio
 
 ## Included
 
@@ -17,5 +17,3 @@
 ## Scope boundary
 
 This release demonstrates offline camera-replay/runtime validation under controlled transport delay. It does not validate a vehicle, openpilot closed-loop driving, CARLA/MetaDrive, HIL, DRIVE AGX/DriveOS, Hyundai production software, real-time operation, or safety performance. Raw VOC data, models, TensorRT engines, and local environment manifests are not included.
-
-This is a draft only: no Git tag or GitHub release has been created.

@@ -62,7 +62,7 @@ Phases 0–6 are complete for bounded offline evidence in the independent WSL en
 
 ## Next task
 
-Review [release readiness](docs/release-readiness.md) and decide whether to expand to a full declared VOC split or publish the bounded evidence; no public tag/release has been created.
+Publish the prepared bounded portfolio release with only the redacted bundle; keep the full declared VOC split as a post-v0.1 scope decision.
 
 ## Historical baseline
 
