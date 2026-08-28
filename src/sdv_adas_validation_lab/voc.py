@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from pathlib import Path
 
 from PIL import Image
@@ -10,6 +11,14 @@ from PIL import Image
 
 VOC_CLASS_COUNT = 21
 VOC_IGNORE_LABEL = 255
+VOC2012_TRAINVAL_MD5 = "6cd6e144f989b92b3379bac3b3de84fd"
+
+
+def verify_trainval_archive(path: Path) -> None:
+  """Reject a truncated or wrong VOC 2012 train/validation archive."""
+  digest = hashlib.md5(path.read_bytes()).hexdigest()
+  if digest != VOC2012_TRAINVAL_MD5:
+    raise ValueError(f"VOC 2012 trainval MD5 mismatch: {digest}")
 
 
 def build_labeled_fixture(voc_root: Path, image_ids: list[str], output_dir: Path, *, period_ns: int = 50_000_000) -> Path:
