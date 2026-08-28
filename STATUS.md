@@ -46,6 +46,7 @@ Phase 0–4 implementation is in place in the independent WSL environment. The F
 - Built a deterministic, non-overlapping 50-image VOC validation fixture (seed `20260828`, 12,671,063 non-void pixels). ONNX measured mIoU 0.643037 / pixel accuracy 0.921312; TensorRT FP16 measured 0.643125 / 0.921344. The corrected warm-up-excluded 12-run FP16 delay matrix is all `valid/pass`, coverage 1.0, with actual median delay ranges 0.0033–0.0039, 50.36–50.94, 100.06–100.81, and 150.47–150.83 ms for the four target conditions.
 - Added `configs/evaluation-policy.yaml` and fixture selection provenance. The non-overlapping 200-image hold-out (seed `20260829`) was evaluated once without tuning: 51,230,864 non-void pixels; ONNX mIoU 0.713040 / pixel accuracy 0.938304 and TensorRT FP16 mIoU 0.713115 / pixel accuracy 0.938329. It is a held-out reference, not full-dataset or real-world validation.
 - Added and executed a CPU-only evidence generator that combines named ground-truth JSON summaries and replay-run artifacts into one Markdown report. The generated cache artifact includes both 50-image/hold-out metrics and all 12 corrected delay runs.
+- Completed the bounded 50-image runtime baseline: TensorRT FP32 ground-truth mIoU 0.642985 / pixel accuracy 0.921310. Three warm-up-excluded zero-delay runs per runtime were all `valid/pass`, coverage 1.0; local median inference ranges were ONNX CPU reference 481.64–490.31ms, TensorRT FP32 43.24–46.71ms, and TensorRT FP16 21.19–22.06ms. These are local replay measurements, not real-time guarantees.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
 - Unit tests: 40 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
@@ -58,7 +59,7 @@ Phase 0–4 implementation is in place in the independent WSL environment. The F
 
 ## Next task
 
-Review the evidence pack and decide whether to expand to a full declared VOC split; keep all current results explicitly as bounded replay evidence, not a release benchmark.
+Review the complete bounded evidence pack and decide whether to expand to a full declared VOC split; keep all current results explicitly as bounded replay evidence, not a release benchmark.
 
 ## Historical baseline
 

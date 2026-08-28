@@ -10,21 +10,19 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 
 | Phase | Deliverable | Verification | Status |
 | --- | --- | --- | --- |
-| 0 | Repository, pinned environment, preflight | imports GPU runtimes; manifest-ready environment facts | In progress |
-| 1 | Versioned `SensorFrame`, replay source, stream preflight | contract and replay fixture tests | In progress |
-| 2 | ONNX reference runtime and fixed preprocessing | deterministic output on sample frames | In progress |
-| 3 | TensorRT FP32/FP16 build and runtime | output comparison and local GPU smoke | In progress |
-| 4 | Non-blocking delay/drop faults | fake-clock FIFO/deadline/overflow tests | In progress |
-| 5 | Manifest, KPI, verdict, batch runner, report | hand-calculated KPI and report fixture tests | Pending |
-| 6 | Formal experiments and evidence | 3 retained runs per runtime/fault condition | Pending |
+| 0 | Repository, pinned environment, preflight | imports GPU runtimes; manifest-ready environment facts | Completed |
+| 1 | Versioned `SensorFrame`, replay source, stream preflight | contract and replay fixture tests | Completed |
+| 2 | ONNX reference runtime and fixed preprocessing | deterministic output on sample frames | Completed |
+| 3 | TensorRT FP32/FP16 build and runtime | output comparison and local GPU smoke | Completed |
+| 4 | Non-blocking delay/drop faults | fake-clock FIFO/deadline/overflow tests | Completed |
+| 5 | Manifest, KPI, verdict, batch runner, report | hand-calculated KPI and report fixture tests | Completed |
+| 6 | Formal experiments and evidence | 3 retained runs per runtime/fault condition | Completed: bounded fixture evidence |
 | 7 | Portfolio release | CI, documentation, sample results, tagged release | Pending |
 
 ## Immediate execution order
 
-1. Review the evidence pack and decide whether to expand to a full declared VOC split; retain all current results as bounded replay evidence only.
-2. Connect ground-truth accuracy KPI, then repeat the runtime/delay matrix against that coverage and retain individual valid, fail, and invalid artifacts.
-3. Generate the final Markdown report and sample-result release artifacts.
-4. Extend the shared delay/drop queue with formal run state and manifest/KPI/verdict reporting.
+1. Review the complete bounded evidence pack and decide whether a full declared VOC split is warranted; retain current results as bounded replay evidence only.
+2. Generate final sample-result release artifacts only after that scope decision.
 
 ## Formal v0.1 experiment matrix
 
