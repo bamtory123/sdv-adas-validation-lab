@@ -15,7 +15,7 @@ def render_evidence(evaluations: list[tuple[str, Path]], run_roots: list[Path]) 
     data = json.loads(path.read_text(encoding="utf-8"))
     lines.append(f"| {name} | {data['evaluated_pixels']} | {data['mean_iou']:.6f} | {data['pixel_accuracy']:.6f} |")
   for root in run_roots:
-    lines.extend(["", f"## Replay runs: {root.name}", "", render(root).rstrip()])
+    lines.extend(["", f"## Replay runs: {root.name}", "", render(root).removeprefix("# Replay run report\n\n").rstrip()])
   return "\n".join(lines) + "\n"
 
 

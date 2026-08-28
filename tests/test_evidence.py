@@ -15,3 +15,4 @@ def test_evidence_renders_metric_and_replay_sections(tmp_path) -> None:
   assert "| holdout | 12 | 0.500000 | 0.750000 |" in text
   assert "## Replay runs: runs" in text
   assert "run-001" in text
+  assert "# Replay run report" not in text
