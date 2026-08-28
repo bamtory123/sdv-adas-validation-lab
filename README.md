@@ -21,3 +21,4 @@ Openpilot/MetaDrive work remains a separate `v0.2` closed-loop adapter baseline;
 - [Plan](PLAN.md): v0.1 milestones and release evidence.
 - [Status](STATUS.md): completed work, verified evidence, and the next task.
 - [FCN/VOC evidence](docs/model-fcn-resnet50.md): model contract, dataset boundaries, and bounded results.
+- [Release readiness](docs/release-readiness.md): evidence boundary and publication checklist.

@@ -59,7 +59,7 @@ Phase 0–4 implementation is in place in the independent WSL environment. The F
 
 ## Next task
 
-Review the complete bounded evidence pack and decide whether to expand to a full declared VOC split; keep all current results explicitly as bounded replay evidence, not a release benchmark.
+Review [release readiness](docs/release-readiness.md) and decide whether to expand to a full declared VOC split or publish the bounded evidence; no public tag/release has been created.
 
 ## Historical baseline
 
