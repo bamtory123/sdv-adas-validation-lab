@@ -79,6 +79,7 @@ def run_once(
   output_dir.mkdir(parents=True, exist_ok=False)
   queue = DelayQueue(fault)
   events: list[FrameEvent] = []
+  published_frames: list[SensorFrame] = []
   predictions: list[Prediction] = []
   first_capture_ns = next(iter(source)).capture_monotonic_ns
   start_ns = time.monotonic_ns()
@@ -87,21 +88,22 @@ def run_once(
     while time.monotonic_ns() < due_ns:
       ready = queue.publish_ready()
       events.extend(item.event for item in ready)
-      if runtime:
-        predictions.extend(runtime.infer(item.frame) for item in ready)
+      published_frames.extend(item.frame for item in ready)
       time.sleep(0.001)
     events.append(queue.submit(frame))
     ready = queue.publish_ready()
     events.extend(item.event for item in ready)
-    if runtime:
-      predictions.extend(runtime.infer(item.frame) for item in ready)
+    published_frames.extend(item.frame for item in ready)
   while queue.pending_count:
     ready = queue.publish_ready()
     events.extend(item.event for item in ready)
-    if runtime:
-      predictions.extend(runtime.infer(item.frame) for item in ready)
+    published_frames.extend(item.frame for item in ready)
     if queue.pending_count:
       time.sleep(0.001)
+
+  # Runtime work is downstream of camera transport: it must not stall producer timing.
+  if runtime:
+    predictions = [runtime.infer(frame) for frame in published_frames]
 
   invalid = [event for event in events if event.kind == "invalid"]
   published = [event for event in events if event.kind == "published"]

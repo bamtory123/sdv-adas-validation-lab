@@ -21,7 +21,7 @@ Demonstrate repeatable offline camera replay under controlled transport delay, c
 
 ## Immediate execution order
 
-1. Define a larger non-overlapping labeled VOC replay split and sample-size policy, then repeat the three-run 0/50/100/150 ms delay study before considering release interpretation.
+1. Re-run the deterministic non-overlapping 50-image VOC fixture with the corrected non-blocking transport path, then define a larger sample-size policy before considering release interpretation.
 2. Connect ground-truth accuracy KPI, then repeat the runtime/delay matrix against that coverage and retain individual valid, fail, and invalid artifacts.
 3. Generate the final Markdown report and sample-result release artifacts.
 4. Extend the shared delay/drop queue with formal run state and manifest/KPI/verdict reporting.

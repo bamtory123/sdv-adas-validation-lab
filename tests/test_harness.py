@@ -1,10 +1,18 @@
 import json
+import time
 
 from sdv_adas_validation_lab.faults import FaultConfig
 from sdv_adas_validation_lab.harness import run_repeated
 from sdv_adas_validation_lab.replay import ReplaySource
 from test_runtime import identity_model
 from sdv_adas_validation_lab.runtime import OnnxReferenceRuntime
+from sdv_adas_validation_lab.runtime import Prediction
+
+
+class SlowRuntime:
+  def infer(self, frame):
+    time.sleep(0.02)
+    return Prediction(frame.frame_id, 1, 2, ((1, 1),))
 
 
 def test_repeated_harness_writes_isolated_artifacts(tmp_path) -> None:
@@ -44,3 +52,8 @@ def test_warmup_artifact_is_excluded_from_returned_measurements(tmp_path) -> Non
   assert len(summaries) == 1
   assert len(list(tmp_path.glob("warmup-*"))) == 1
   assert len(list(tmp_path.glob("run-*"))) == 1
+
+
+def test_runtime_inference_does_not_stall_camera_transport(tmp_path) -> None:
+  summary = run_repeated(ReplaySource.synthetic(3, period_ns=1_000_000), FaultConfig(), tmp_path, repeats=1, runtime=SlowRuntime())[0]
+  assert summary["transport_delay"]["max_ms"] < 10

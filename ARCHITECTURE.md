@@ -27,6 +27,8 @@ The parity comparator uses the same `ReplaySource` frames for both runtimes and 
 
 Delay experiments execute one warm-up per condition, then shuffle all delay conditions independently within each measured repeat block using a recorded deterministic seed. The aggregate manifest records the exact block order, so elapsed GPU/WSL effects are not systematically assigned to one delay condition.
 
+The replay loop records all ready publications before invoking the runtime adapter. Inference latency is still captured per frame, but runtime work is downstream of camera transport and cannot block the simulated camera producer.
+
 The replay harness records actual publish delay rather than only the requested fault delay, plus inference latency and published/captured coverage. This isolates transport scheduling from runtime execution time.
 
 Configured frame drops are expected fault events and are excluded from the coverage denominator; overflow and unaccounted loss remain invalid conditions.
