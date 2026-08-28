@@ -11,6 +11,7 @@ Reproducible, offline validation of a camera frame contract, replay pipeline, tr
 - Stream-integrity validation and unit tests
 - Environment preflight recorded in run manifests
 - JSONL/synthetic replay and repeatable non-blocking delay/drop fault smoke harness
+- CPU-only Markdown evidence generation from ground-truth and replay artifacts
 
 Openpilot/MetaDrive work remains a separate `v0.2` closed-loop adapter baseline; it is not copied into this repository.
 
@@ -19,3 +20,4 @@ Openpilot/MetaDrive work remains a separate `v0.2` closed-loop adapter baseline;
 - [Architecture](ARCHITECTURE.md): component boundaries, data path, and invariants.
 - [Plan](PLAN.md): v0.1 milestones and release evidence.
 - [Status](STATUS.md): completed work, verified evidence, and the next task.
+- [FCN/VOC evidence](docs/model-fcn-resnet50.md): model contract, dataset boundaries, and bounded results.

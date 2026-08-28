@@ -31,6 +31,8 @@ The replay loop records all ready publications before invoking the runtime adapt
 
 `configs/evaluation-policy.yaml` separates explicit development smoke IDs, the seeded repeatability fixture, and a non-overlapping seeded hold-out. Each fixture's local `source.json` records selected IDs and selection metadata; hold-out metrics are recorded once and must not guide tuning.
 
+The CPU-only evidence generator combines named ground-truth summaries with one or more replay-run directories. It reads only artifacts already produced by the harness and writes Markdown; it never accesses models, raw images, labels, or TensorRT engines.
+
 The replay harness records actual publish delay rather than only the requested fault delay, plus inference latency and published/captured coverage. This isolates transport scheduling from runtime execution time.
 
 Configured frame drops are expected fault events and are excluded from the coverage denominator; overflow and unaccounted loss remain invalid conditions.
