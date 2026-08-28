@@ -55,6 +55,7 @@ Phases 0–8 are complete for the bounded offline portfolio release plus one ful
 - Added runtime preflight collector and `configs/compatibility.yaml`.
 - Unit tests: 43 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
 - Evaluated the complete VOC 2012 segmentation validation split once (1,449 images, deterministic order seed `20260830`, 370,187,947 non-void pixels). ONNX reference measured mIoU 0.696969 / pixel accuracy 0.930828; TensorRT FP32 measured mIoU 0.696991 / pixel accuracy 0.930835; TensorRT FP16 measured mIoU 0.696906 / pixel accuracy 0.930831. Artifacts and provenance manifests remain in the external cache; this does not modify the published v0.1 scope.
+- Generated a CPU-only combined evidence report from the three full-VOC summaries. The report remains in the external cache and reads no raw images, labels, models, or engines.
 
 ## Not yet implemented
 
@@ -63,7 +64,7 @@ Phases 0–8 are complete for the bounded offline portfolio release plus one ful
 
 ## Next task
 
-Generate a CPU-only combined evidence report that includes the full-VOC reference, then scope the next fault campaign or separate v0.2 closed-loop adapter while retaining the v0.1 boundary.
+Scope the next fault campaign or separate v0.2 closed-loop adapter while retaining the v0.1 boundary.
 
 ## Historical baseline
 
