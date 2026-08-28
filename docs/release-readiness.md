@@ -21,4 +21,6 @@ This evidence supports a bounded offline camera-replay portfolio demonstration. 
 2. If publishing, attach only the CI-verified [redacted sample input](../samples/evidence/README.md), a generated Markdown report, and reproduction commands—never raw VOC data, ONNX models, TensorRT engines, or engine-bound manifests.
 3. Confirm README and release notes retain the scope boundary above.
 
+The repository contains a [draft release note](release-notes-v0.1.0-portfolio.md) for this review; it is not a published GitHub release.
+
 No Git tag or public GitHub release has been created by this document.
