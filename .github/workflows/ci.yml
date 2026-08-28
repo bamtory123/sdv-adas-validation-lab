@@ -15,3 +15,4 @@ jobs:
       - run: uv run python -m sdv_adas_validation_lab.release_audit $(git ls-files)
       - run: uv run python -m sdv_adas_validation_lab.report --runs tests --output /tmp/report.md
       - run: uv run python -m sdv_adas_validation_lab.evidence --evaluation redacted-sample samples/evidence/ground-truth.json --runs samples/evidence/replay --output /tmp/evidence.md
+      - run: uv run python -m sdv_adas_validation_lab.release_bundle --output /tmp/release-bundle

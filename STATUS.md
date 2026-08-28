@@ -49,9 +49,10 @@ Phases 0–6 are complete for bounded offline evidence in the independent WSL en
 - Completed the bounded 50-image runtime baseline: TensorRT FP32 ground-truth mIoU 0.642985 / pixel accuracy 0.921310. Three warm-up-excluded zero-delay runs per runtime were all `valid/pass`, coverage 1.0; local median inference ranges were ONNX CPU reference 481.64–490.31ms, TensorRT FP32 43.24–46.71ms, and TensorRT FP16 21.19–22.06ms. These are local replay measurements, not real-time guarantees.
 - Added a release-safe redacted evidence sample and CI evidence-generation check. It includes only compact result summaries; no raw data, models, engines, local paths, or environment manifests are tracked.
 - Added a `v0.1.0-portfolio` draft release note with reproduction boundaries. It is not a published GitHub release or tag.
+- Added and locally generated an unpublished release-bundle artifact containing only redacted documents, a redacted evidence report, and SHA-256 manifest. Bundle generation and its content audit run in CI.
 - Smoke-tested two repeated runs: 8 synthetic frames, 10 ms delay, drop every third frame; each produced 6 published frames and 2 configured drops with `valid/pass`.
 - Added runtime preflight collector and `configs/compatibility.yaml`.
-- Unit tests: 40 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
+- Unit tests: 43 passed plus 2 opt-in local GPU smoke tests on 2026-08-28.
 
 ## Not yet implemented
 
